@@ -4,10 +4,10 @@ import matplotlib.pyplot as plt
 import numpy as np
 from scipy.interpolate import LinearNDInterpolator
 
-#TODO
-t_max =
-t_min =
-t_step =
+#temperature bounds in Kelvin
+t_max = 130
+t_min = 200
+t_step = 0.1
 
 #Get original data and categorize by T
 studies = []
