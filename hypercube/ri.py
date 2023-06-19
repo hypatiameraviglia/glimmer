@@ -1,3 +1,4 @@
+#Create class ri to store data from lit
 class ri:
     def __init__(self, dataset, wavel, n, k, dn, dk)
         self.wavel = wavel
