@@ -13,29 +13,35 @@ def fft_on_k(ri):
     k = ri.k
 
     # FFT of imaginary index
-    fft_k = fft(k)
+    #fft_k = fft(k)
 
     # pull error on imaginary index from object ri
     dk = ri.dk
 
     # FFT the k + dk
-    kn = [None]*len(k)
+    k_dk = [None]*len(k)
     for i in k: 
-        kn[i] = k[i] + dk[i]
+        k_dk[i] = k[i] + dk[i]
 
-    fft_kn = fft(kn, axis=-1)
+    fft_k_dk = fft(k_dk, axis=-1)
     
     # return fft_kn.var(axis=0)
     return fft_kn
 
 def fft_on_inv_wavel(ri):
-    # pull imaginary index from object ri
+    # pull wavelength from object ri
     wavel = ri.wavel
 
     # set up fft(1/pi*wavel)
-    fft_wavel = fft(1/(np.pi*wavel))
+    fft_wavel = fft(1/(np.pi*wavel), axis=-1)
     
     return fft_wavel
 
-def inv_fft(fft_kn, fft_wavel)
+def inv_fft(fft_k_dk, fft_wavel)
+    dn = fft.ifft(fft_k_dk*fft_wavel)
     
+    n = ri.n
+    for i in n:
+        ri.dn[i] = dn[i]
+    
+    return
