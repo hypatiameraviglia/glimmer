@@ -23,10 +23,10 @@ def copy_ri(indices):
 def wiggle_indices(indices_copy):
     for index in indices_copy:
         #Establish bounds
-        n_top = n + dn
-        n_bottom = n - dn
-        k_top = k + dk
-        k_bottom = k - dk
+        n_max = n + dn
+        n_min = n - dn
+        k_max = k + dk
+        k_min = k - dk
 
         #wiggle
         n = random.uniform(n_bottom, n_top)
