@@ -26,7 +26,7 @@ def fft_on_k(ri):
     fft_k_dk = fft(k_dk, axis=-1)
     
     # return fft_k_dk.var(axis=0)
-    return fft_kn
+    return fft_k_dk
 
 def fft_on_inv_wavel(ri):
     # pull wavelength from object ri
