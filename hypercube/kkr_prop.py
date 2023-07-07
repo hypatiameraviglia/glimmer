@@ -1,4 +1,4 @@
-# Caclculates error propogation through Hilbert transform version of 
+# Calculates error propogation through Hilbert transform version of 
 #Kramer-Kronig Relation (eq. 17 in Musardo 2017)
 
 import numpy as np
