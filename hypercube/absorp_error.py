@@ -7,7 +7,7 @@ import matplotlib.pyplot as plt
 #Leger et al., 1983
 def leger(ri):
     if ri.dataset == "leger1983":
-        dalpha = 0.05 #% relative error
+        dalpha = 0.10 #% absolute error, Leger p. 165
         for i in ri.wavel:
             ri.dk[i] = (dalpha*ri.wavel[i])/(4*np.pi)
     return ri.dk
