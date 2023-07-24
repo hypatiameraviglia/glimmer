@@ -1,5 +1,5 @@
-# Calculates error propogation through Hilbert transform version of 
-#Kramer-Kronig Relation (eq. 17 in Musardo 2017)
+# Calculates error propagation through Hilbert transform version of 
+#Kramers-Kronig Relation (eq. 17 in Musardo 2017)
 
 import numpy as np
 from numpy.fft import fft
@@ -23,7 +23,7 @@ def fft_on_k(ri):
     for i in k: 
         k_dk[i] = k[i] + dk[i]
 
-    fft_k_dk = fft(k_dk, axis=-1)
+    fft_k_dk = fft.fft(k_dk, axis=-1)
     
     # return fft_k_dk.var(axis=0)
     return fft_k_dk
@@ -33,7 +33,7 @@ def fft_on_inv_wavel(ri):
     wavel = ri.wavel
 
     # set up fft(1/pi*wavel)
-    fft_wavel = fft(1/(np.pi*wavel), axis=-1)
+    fft_wavel = fft.fft(1/(np.pi*wavel), axis=-1)
     
     return fft_wavel
 
@@ -44,4 +44,4 @@ def inv_fft(fft_k_dk, fft_wavel)
     for i in n:
         ri.dn[i] = dn[i]
     
-    return
+    return dn
