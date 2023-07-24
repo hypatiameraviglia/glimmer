@@ -1,6 +1,6 @@
 #Test Monte Carlo pertubation of RI values within error bars to estimate error introduced by spline
 
-import unnittest
+import unittest
 
 from .context import glimmer #TODO: Does this work?
 from glimmer import calc_wiggled

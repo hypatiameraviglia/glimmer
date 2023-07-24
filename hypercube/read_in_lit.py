@@ -23,7 +23,7 @@ def read_data(directory):
     
     return ri
 
-def get_error():
+def get_error(ri):
 #Populate error based on study; see respective papers
     if ri.dataset == "test2023":
     #Test file for use by test_read_in_lit.py
@@ -69,4 +69,4 @@ def get_error():
 
     if ri.dataset == "kofman2019":
 
-
+    return ri
