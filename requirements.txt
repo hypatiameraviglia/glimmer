@@ -1,6 +1,6 @@
 # Packages Glimmer depends on
-numpy
-matplotlib
-scipy
+numpy >= 1.21.2
+matplotlib >= 3.5.2
+scipy >= 1.7.2
 random
 copy
