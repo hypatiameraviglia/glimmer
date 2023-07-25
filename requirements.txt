@@ -1,0 +1,6 @@
+# Packages Glimmer depends on
+numpy
+matplotlib
+scipy
+random
+copy
