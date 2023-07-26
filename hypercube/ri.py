@@ -3,6 +3,7 @@ class ri:
     def __init__(self, dataset, wavel, temp, n, k, dn, dk)
         self.wavel = wavel
         self.dataset = dataset
+        self.errortype = errortype
         self.temp = temp
         self.n = n
         self.k = k
