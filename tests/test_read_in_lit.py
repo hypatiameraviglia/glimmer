@@ -12,7 +12,7 @@ import os
 class TestReadInLit(unittest.TestCase):
 
     def setUp(self):
-        directory = "~/scattering/lit/test"
+        directory = "~/scattering/tests"
 
 # Tests of read_data
 

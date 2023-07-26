@@ -1,8 +1,7 @@
-DATASET NAME
-TEMPERATURE (K)
-TYPE OF ERROR (abs for absorption spectrum coefficient, dk for % error on k,
-		ne for no error reported, pw for piece-wise % errors)
-Wavelength (microns)     real  imaginary
+warren1984
+200
+dk
+Wavelength (microns) 	real   imaginary
 2.50000  1.224  0.0
 2.53165  1.218  0.0
 2.56410  1.210  0.0
@@ -17,4 +16,4 @@ Wavelength (microns)     real  imaginary
 2.84091  1.007  0.068
 2.85714  0.983  0.093
 2.87356  0.960  0.131
-etc.
+
