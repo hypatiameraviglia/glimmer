@@ -5,9 +5,8 @@ import ri from ri.py
     directory = "~/scattering/lit"
 
 def read_data(directory):
-    for filename in os.listdir(directory):
-        if filename.endswith('.txt'):   #only the refrac files
-            f = open(filename, "r")
+    if filename.endswith('.txt'):   #only the refrac files
+        f = open(filename, "r")
 
         #refrac data by wavel
         ri.dataset = f.readlines()[0]
