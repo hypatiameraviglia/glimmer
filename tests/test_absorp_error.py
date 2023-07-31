@@ -2,9 +2,9 @@
 
 import unittest
 
-from .context import glimmer
-from glimmer import absorp_error
-from glimmer import ri
+from .context import hypercube
+from hypercube import absorp_error
+from hypercube import ri
 
 class TestAbsorpError(unittest.TestCase):
 

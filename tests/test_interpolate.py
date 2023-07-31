@@ -2,8 +2,9 @@
 # data from each study and interpolates n, k, dn, and dk within temperature/
 # wavelength space
 
-from .context import glimmer
-from glimmer import interpolate
+from .context import hypercube
+from hypercube import interpolate
+from hypercube import ri
 
 class TestInterpolate(unittest.TestCase):
 

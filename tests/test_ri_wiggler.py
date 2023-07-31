@@ -1,8 +1,8 @@
 #Tests ri_wiggler.py, which makes a copy of a set of indices and randomizes each point within the bounds of the error
 import unittest
 
-from .context import glimmer
-from glimmer import ri_wiggler
+from .context import hypercube
+from hypercube import ri_wiggler
 
 class TestCalcWiggled(unittest.TestCase):
 

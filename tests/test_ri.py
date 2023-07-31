@@ -3,8 +3,8 @@
 
 import unittest
 
-from .context import glimmer
-from glimmer import ri
+from .context import hypercube
+from hypercube import ri
 
 class TestRIClass(unittest.TestCase):
 

@@ -2,9 +2,9 @@
 
 import unittest
 
-from .context import glimmer #TODO: Does this work?
-from glimmer import calc_wiggled
-from glimmer import ri
+from .context import hypercube
+from hypercube import calc_wiggled
+from hypercube import ri
 
 class TestCalcWiggled(unittest.TestCase):
 

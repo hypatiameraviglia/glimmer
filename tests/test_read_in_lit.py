@@ -3,9 +3,9 @@
 
 import unittest
 
-from .context import glimmer
-from glimmer import read_in_lit
-from glimmer import ri
+from .context import hypercube
+from hypercube import read_in_lit
+from hypercube import ri
 
 import os
 

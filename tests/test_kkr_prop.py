@@ -1,8 +1,9 @@
 #Tests error propogation through KKR
 import unittest
 
-from .context import glimmer
-from glimmer import kkr_prop
+from .context import hypercube
+from hypercube import kkr_prop
+from hypercube import ri
 
 class TestCalcWiggled(unittest.TestCase):
 
