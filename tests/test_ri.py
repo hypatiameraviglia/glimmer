@@ -10,11 +10,7 @@ class TestRIClass(unittest.TestCase):
 
     def setUp(self):
         #runs before each test in class
-        self.ri1 = ri.ri("toon1994", 1, 200, 0.5, 0.5, 0.2, 0.2)
-        self.ri2 = ri.ri("toon1994", 2, 200, 0.4, 0.6, 0.2, 0.2)
-        self.ri3 = ri.ri("toon1994", 3, 200, 0.3, -0.2, 0.2, 0.2)
-
-        self.ri = [self.ri1, self.ri2, self.ri3]
+        self.ri = ri.ri("leger1983", [1, 2, 3], [200, 200, 200], "pe", [0.5, 0.4, 0.3], [0.2, 0.2, -0.2], [0, 0, 0], [0, 0, 0])
 
     def test_dataset_is_string(self):
         self.assertEqual(type(self.ri[1].dataset), type(""))

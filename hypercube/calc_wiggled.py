@@ -1,7 +1,7 @@
 #calc_wiggled.py
 
 import numpy as np
-from glimmer import ri_wiggler
+from hypercube import ri_wiggler
 
 num_wiggled_indices = 10
 

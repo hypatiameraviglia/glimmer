@@ -10,12 +10,8 @@ class TestInterpolate(unittest.TestCase):
 
     def setUp(self):
         #Runs before each test within the class
-        self.ri1 = ri.ri("toon1994", 1, 200, 0.5, 0.5, 0.2, 0.2)
-        self.ri2 = ri.ri("warren1984", 2, 120, 0.4, 0.6, 0.2, 0.2)
-        self.ri3 = ri.ri("toon1994", 3, 200, 0.3, -0.2, 0.2, 0.2)
-
-        self.ri = [self.ri1, self.ri2, self.ri3]
-    
+        self.ri = ri.ri("leger1983", [1, 2, 3], [200, 200, 200], "pe", [0.5, 0.4, 0.3], [0.2, 0.2, -0.2], [0, 0, 0], [0, 0, 0])
+ 
     def temp_axis_is_array(self):
         temp_axis = interpolate.interpolate(self.ri)[1]
         self.assertEqual(type(temp_axis), type([]))

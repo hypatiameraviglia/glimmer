@@ -1,7 +1,7 @@
 #Takes in ri object with data from all studies added together and 2d 
 # interpolates across temperature and wavelength axes
 
-import matplotlib:
+import matplotlib
 matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 import numpy as np
