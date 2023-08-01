@@ -19,7 +19,7 @@ class TestAbsorpError(unittest.TestCase):
     def test_all_dks_filled(self):
         result = absorp_error.leger(self.ri)
         print("\ndks for Leger are ", result)
-        self.assertEqual(len(result), len(ri.wavelength))
+        self.assertEqual(len(result), len(ri.wavel))
 
     def test_dks_are_floats(self):
         result = absorp_error.leger(self.ri)
@@ -37,5 +37,5 @@ class TestAbsorpError(unittest.TestCase):
         #Hand calculated maximum dk at greatest wavelength
         result = absorp_error.leger(self.ri)
         max_dk = max(result)
-        self.assertLessEqual(min_dk, 0.023873241463)
+        self.assertLessEqual(max_dk, 0.023873241463)
 
