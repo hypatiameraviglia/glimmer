@@ -1,7 +1,12 @@
 #ri_wiggler.py
+# Takes in an ri object, makes a deep copy, and randomly reselects each n and 
+# k within their error bounds to be re-splined
+
 import random
 import copy
+from hypercube import ri
 
+"""
 #TODO: set up separate doc with n, k, dn, dk
 #Read in array of indices from lit
 def read_ri(dataset):
@@ -13,22 +18,17 @@ def read_ri(dataset):
             dataset.append(float(i.split(' ')[1]))
         f.close()
     return [n, k, dn, dk]
+"""
 
 #Deep copy (keep original) of refractive indices
-def copy_ri(indices):
-    indices_copy = copy.deepcopy(indices)
-    return indices_copy
+def copy_ri(ri):
+    ri_copy = copy.deepcopy(ri)
+    return ri_copy
 
 #Wiggle 'em
-def wiggle_indices(indices_copy):
-    for index in indices_copy:
-        #Establish bounds
-        n_max = n + dn
-        n_min = n - dn
-        k_max = k + dk
-        k_min = k - dk
-
+def wiggle_indices(ri_copy):
+    for i in range(len(ri_copy.wavel)):
         #wiggle
-        n = random.uniform(n_bottom, n_top)
-        k = random.uniform(k_bottom, k_top)
-    return indices_copy
+        ri_copy.n[i] = random.uniform(ri_copy.nmin[i], ri_copy.nmax[i])
+        ri_copy.k[i] = random.uniform(ri_copy.kmin[i], ri_copy.kmax[i])
+    return ri_copy

@@ -17,7 +17,7 @@ wavel_min = 0.1
 wavel_max = 30
 wavel_step = 0.05
 
-def interpolate(ri):
+def spline(ri):
     #Establish studied temperature and wavelength as 2d mesh (interpolation)
     temp_axis = np.linspace(min(ri.temp), max(ri.temp), temp_step)
     wavel_axis = np.linspace(min(ri.wavel), max(ri.wavel), wavel_step)

@@ -13,6 +13,10 @@ class ri:
         self.nmin = [ ni - ni*dni for ni in n for dni in dn ]
         self.kmax = [ ki + ki*dki for ki in k for dki in dk ]
         self.kmin = [ ki - ki*dki for ki in k for dki in dk ]
+        self.n_avg = [] # Calculated by calc_wiggled.extrapolate_wiggled_ris
+        self.k_avg = []
+        self.n_stdev = []
+        self.k_stdev = []
     def __str__(self, dataset, wavel, n, k, dn, dk):
         print("{self.dataset} is a group of ref. ind. of length ", len(n))
 
