@@ -1,8 +1,8 @@
 #Open .txt files from literature studies and populate ri objects with data
 from hypercube import ri
     
-    #Location of experimental data files
-    directory = "~/scattering/lit"
+#Location of experimental data files
+directory = "~/scattering/lit"
 
 def read_data(directory):
     if filename.endswith('.txt'):   #only the refrac files

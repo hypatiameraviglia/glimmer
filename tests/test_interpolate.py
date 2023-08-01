@@ -2,6 +2,8 @@
 # data from each study and interpolates n, k, dn, and dk within temperature/
 # wavelength space
 
+import unittest
+
 from .context import hypercube
 from hypercube import interpolate
 from hypercube import ri

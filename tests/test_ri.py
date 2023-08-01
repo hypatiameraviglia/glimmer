@@ -13,7 +13,7 @@ class TestRIClass(unittest.TestCase):
         self.ri = ri.ri("leger1983", [1, 2, 3], [200, 200, 200], "pe", [0.5, 0.4, 0.3], [0.2, 0.2, -0.2], [0, 0, 0], [0, 0, 0])
 
     def test_dataset_is_string(self):
-        self.assertEqual(type(self.ri[1].dataset), type(""))
+        self.assertEqual(type(self.ri.dataset), type(""))
 
     def test_wavel_is_array(self):
         self.assertEqual(type(self.ri.wavel), type([]))

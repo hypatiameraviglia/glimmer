@@ -48,7 +48,7 @@ def interpolate(ri):
     dk_axis = dk_interp(temp_axis, wavel_axis)
     dk_extra = dk_interp(temp_extra, wavel_extra)
 
-return ri, temp_axis, wavel_axis, temp_extra, wavel_extra, n_axis, n_extra, k_axis, k_extra, dn_axis, dn_extra, dk_axis, dk_extra
+    return ri, temp_axis, wavel_axis, temp_extra, wavel_extra, n_axis, n_extra, k_axis, k_extra, dn_axis, dn_extra, dk_axis, dk_extra
 
 def plot_interpolation(ri, temp_axis, wavel_axis, n_axis, k_axis, dn_axis, dk_axis):
     #Plot interp'd n

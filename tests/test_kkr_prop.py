@@ -15,5 +15,3 @@ class TestCalcWiggled(unittest.TestCase):
         result = kkr_prop.inv_fft(kkr_prop.fft_on_inv_wavel(self.ri)*kkr_prop.fft_on_k(self.ri))
         print("\nresult is ", result)
         self.IsInstance(result, [])
-
-    def test

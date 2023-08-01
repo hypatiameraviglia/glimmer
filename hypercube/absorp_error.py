@@ -8,7 +8,7 @@ import matplotlib.pyplot as plt
 def leger(ri):
     if ri.dataset == "leger1983":
         dalpha = 0.10 #% absolute error, Leger p. 165
-        for i in ri.wavel:
+        for i in range(len(ri.wavel)):
             ri.dk[i] = (dalpha*ri.wavel[i])/(4*np.pi)
     return ri.dk
 
