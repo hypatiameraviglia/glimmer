@@ -22,5 +22,34 @@ class TestCalcWiggled(unittest.TestCase):
         print("\nresult is ", result)
         self.assertEqual(len(result), calc_wiggled.num_wiggled_indices)
 
-    #TODO: How can we test the average and stdev without taking the integration of the spline? What did Conor say about this?
+    def test_n_avg_is_above_min(self):
+        result = calc_wiggled.extrapolate_wiggled_ris(calc_wiggled.wiggle_indices_n_times(self))[0]
+        print("\nresult is ", result)
+        nmin = 0.3 # Lowest n point in sample data
+        self.assertGreaterThan(result, nmin)
+
+    def test_n_avg_is_below_max(self):
+        result = calc_wiggled.extrapolate_wiggled_ris(calc_wiggled.wiggle_indices_n_times(self))[0]
+        nmax = 0.5
+        self.assertLessThan(result, nmax)
+
+    def test_k_avg_is_above_min(self):
+        result = calc_wiggled.extrapolate_wiggled_ris(calc_wiggled.wiggle_indices_n_times(self))[2]
+        kmin = -0.2
+        self.assertGreaterThan(result, kmin)
+
+    def test_k_avg_is_below_max(self):
+        result = calc_wiggled.extrapolate_wiggled_ris(calc_wiggled.wiggle_indices_n_times(self))[2]
+        kmax = 0.2
+        self.assertLessThan(result, kmax)
+
+    def test_n_stdev_above_min(self):
+        result = calc_wiggled.extrapolate_wiggled_ris(calc_wiggled.wiggle_indices_n_times(self))[1]
+        stdevmin = 0
+        self.assertGreaterThan(result, stdevmin)
+
+    def test_k_stdev_above_min(self):
+        result = calc_wiggled.extrapolate_wiggled_ris(calc_wiggled.wiggle_indices_n_times(self))[3]
+        stdevmin = 0
+        self.assertGreaterThan(result, stdevmin)
 
