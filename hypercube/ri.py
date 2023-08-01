@@ -1,14 +1,14 @@
 #Create class ri to store data from lit
 class ri:
     def __init__(self, dataset, wavel, temp, errortype, n, k, dn, dk):
-        self.wavel = float(wavel)
+        self.wavel = [ float(x) for x in wavel ]
         self.dataset = dataset
         self.errortype = errortype
-        self.temp = float(temp)
-        self.n = float(n)
-        self.k = float(k)
-        self.dn = float(dn)
-        self.dk = float(dk)
+        self.temp = [ float(x) for x in temp ]
+        self.n = [ float(x) for x in temp ]
+        self.k = [ float(x) for x in k ]
+        self.dn = [ float(x) for x in dn ]
+        self.dk = [ float(x) for x in dk ]
         self.nmax = [ ni + ni*dni for ni in n for dni in dn ]
         self.nmin = [ ni - ni*dni for ni in n for dni in dn ]
         self.kmax = [ ki + ki*dki for ki in k for dki in dk ]
