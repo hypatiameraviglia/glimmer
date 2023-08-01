@@ -19,7 +19,7 @@ class TestAbsorpError(unittest.TestCase):
     def test_all_dks_filled(self):
         result = absorp_error.leger(self.ri)
         print("\ndks for Leger are ", result)
-        self.assertEqual(len(result), len(ri.wavel))
+        self.assertEqual(len(result), len(self.ri.wavel))
 
     def test_dks_are_floats(self):
         result = absorp_error.leger(self.ri)
