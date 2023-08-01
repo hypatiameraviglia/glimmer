@@ -5,7 +5,7 @@ import numpy as np
 from numpy.fft import fft
 import matplotlib.pyplot as plt
 
-from ri import ri
+from hypercube import ri
 
 def fft_on_k(ri):
 #Adapted from Warren Weckesser on stackoverflow

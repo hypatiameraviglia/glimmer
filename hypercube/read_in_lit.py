@@ -1,5 +1,5 @@
 #Open .txt files from literature studies and populate ri objects with data
-import ri from ri.py
+from hypercube import ri
     
     #Location of experimental data files
     directory = "~/scattering/lit"

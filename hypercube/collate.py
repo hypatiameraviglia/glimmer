@@ -1,9 +1,9 @@
 # Combine experimental data from multiple studies into one ri object for easier
 # interpolation and extrapolation
 
-import ri from ri.py
-import read_in_lit
-import interpolate
+from hypercube import ri
+from hypercube import read_in_lit
+from hypercube import interpolate
 
 #Location of experimental data files
 directory = "~/scattering/lit"

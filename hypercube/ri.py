@@ -9,10 +9,10 @@ class ri:
         self.k = k
         self.dn = dn
         self.dk = dk
-        self.nmax = n + n*dn
-        self.nmin = n - n*dn
-        self.kmax = k + k*dk
-        self.kmin = k - k*dk
+        self.nmax = [ ni + ni*dni for ni in n for dni in dn ]
+        self.nmin = [ ni - ni*dni for ni in n for dni in dn ]
+        self.kmax = [ ki + ki*dki for ki in k for dki in dk ]
+        self.kmin = [ ki - ki*dki for ki in k for dki in dk ]
     def __str__(self, dataset, wavel, n, k, dn, dk):
         print("{self.dataset} is a group of ref. ind. of length ", len(n))
 
