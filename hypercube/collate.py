@@ -38,8 +38,9 @@ def avg_stacked_pts(ri_list):
                                 ri_list[a].k[c] = (ri_list[a].k[c] + ri_list[b].k[d])/2
                                 # Remove duplicate point (only avg persists)
                                 del(ri_list[b].k[d])
-                                # Combine dks (assumes dks are all % error)
-                                ri_list[a].dk[c]  = np.sqrt((ri_list[a].dk[c])**2 + (ri_list[b].dk[d])**2)
+                                # Combine dks (assumes dks are same units as
+                                # k, not % error)
+                                ri_list[a].dk[c]  = ri_list[a].k[c]*(np.sqrt((((ri_list[a].dk[c])/(ri_list[a].k[c]))**2) + (((ri_list[b].dk[d])/(ri_list[b].k[d])**2))))
                                 # Remove duplicate point
                                 del(ri_list[b].dk[d])
     return ri_list
