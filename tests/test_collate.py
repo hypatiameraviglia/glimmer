@@ -55,6 +55,10 @@ class TestCollate(unittest.TestCase):
                 self.assertEqual(type(dk), type(float(0.1)))
 
     def test_avgd_ks_correct(self):
+        avgd_ri_list = collate.avg_stacked_pts(collate.read_all_data(ri, directory))
+        for i in range(len(avgd_ri_list)):
+            if avgd_ri_list.wavel[i] = 2.5:
+
 
     def test_adjd_dks_correct(self):
 
@@ -104,4 +108,19 @@ class TestCollate(unittest.TestCase):
                     for temp_j in collated_ri.temp:
                         if wavel_i = wavel_j and temp_i = temp_j:
                             testvalue = False
-        self.assertTrue(testvalue, "Stacked points persisting after collation")
+        self.assertTrue(testvalue, "Stacked points persisting after collation")i
+
+    def test_avgd_ks_correct(self):
+        collated_ri = collate.collate(ri, collate.avg_stacked_pts(collate.read_all_data(ri, directory)))
+        for i in range(len(collated_ri)):
+            if collated_ri.wavel[i] = 2.5:
+                self.assertEqual(collated_ri.k[i], 0.5)
+                #Hand calculated avg of 0 and 1
+
+    def test_adjd_dks_correct(self):
+        collated_ri = collate.collate(ri, collate.avg_stacked_pts(collate.read_all_daya(ri, directory)))
+        for i in range(len(collated_ri)):
+            if collated_ri.wavel = 2.5:
+                self.assertEqual(collated_ri.dk[i], 0.1)
+                #Hand calculated combined error between 20% and 30% of 1 and 0 respectively. See collate.avg_stacked_pts for equation
+
