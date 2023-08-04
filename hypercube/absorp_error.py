@@ -9,3 +9,8 @@ def calc_error_from_dalpha(ri, dalpha):
         ri.dk[i] = (dalpha*ri.wavel[i])/(4*np.pi)
     return ri.dk
 
+def perovich(ri, dalpha_array):
+    for i in range(len(dalpha_array)):
+        ri.dk[i] = (dalpha_array[i]*ri.wavel[i])/(4*np.pi)
+    return ri.dk
+
