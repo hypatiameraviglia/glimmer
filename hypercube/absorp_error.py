@@ -2,15 +2,19 @@
 
 import numpy as np
 import matplotlib.pyplot as plt
+import scipy.constants
+
 #TODO: Error on wavelength? Changes equation for error prop -- no longer linear
 
-def calc_error_from_dalpha(ri, dalpha):
+def calc_error_from_dalpha(ri, perc_dalpha):
+    #See Meraviglia et al. (2023) appendix A and Leger et al. (1983) for 
+    # details on calculation of error from absorption coefficient
     for i in range(len(ri.wavel)):
-        ri.dk[i] = (dalpha*ri.wavel[i])/(4*np.pi)
+        ri.dk[i] = ri.k[i]*(perc_dalpha*ri.wavel[i])/(4*np.pi*scipy.constants.c)
     return ri.dk
 
 def perovich(ri, dalpha_array):
     for i in range(len(dalpha_array)):
-        ri.dk[i] = (dalpha_array[i]*ri.wavel[i])/(4*np.pi)
+        ri.dk[i] = ri.k[i]*(dalpha_array[i]*ri.wavel[i])/(4*np.pi*scipy.constants.c)
     return ri.dk
 

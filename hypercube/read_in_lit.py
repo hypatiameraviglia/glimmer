@@ -57,14 +57,14 @@ def get_error(ri):
                 #Warren and Brandt (2006), fig 7
                 for wb2006_dk.txt in os.listdir(directory):
                     f = open(filename, "r")
-                    lines = f.readlines()[2:] # Should this be 3?
+                    lines = f.readlines()[2:]
                     wavel, k, k_min, k_max = []
                     for line in lines:
                         wavel.append(0.001*(float(line.split(' ')[0])))
                         k_min.append(float(line.split(' ')[2]))
                         k_max.append(float(line.split(' ')[3]))
                         dk[line] = k_max[line] - k_min[line]
-                        if wavel[i] = wavel[line]:
+                        if wavel[i] >= wavel[line] and < wavel[line + 1]:
                             ri.dk[i] = dk[line]
             if wavel[i] > 0.6 and < 0.7:
                 #Grenfell and Perovich (1981), table 1
@@ -79,12 +79,12 @@ def get_error(ri):
                 #Gosse et al. (1995), table 1
                 for gosse1995_dk.txt in os.listdir(directory):
                     f = open(filename, "r")
-                    lines = f.readlines()[2:] # Should this be 3?
+                    lines = f.readlines()[2:]
                     wavel, perc_err = []
                     for line in lines:
                         wavel.append(float(line.split(' ')[0]))
-                        perc_err.append(float(line.split(' ')[2]))
-                        if wavel[i] = wavel[line]:
+                        perc_err.append(float(line.split(' ')[1]))
+                        if wavel[i] >= wavel[line] and < wavel[line + 1]:
                             ri.dk[i] = ri.k[i]*perc_err[line]
 
             if wavel[i] > 2.9 and < 3.4:
@@ -100,8 +100,8 @@ def get_error(ri):
                     wavel, perc_err = []
                     for line in lines:
                         wavel.append(float(line.split(' ')[0]))
-                        perc_err.append(float(line.split(' ')[2]))
-                        if wavel[i] = wavel[line]:
+                        perc_err.append(float(line.split(' ')[1]))
+                        if wavel[i] >= wavel[line] and < wavel[line + 1]:
                             ri.dk[i] = ri.k[i]*perc_err[line]
             if wavel[i] > 7.8125 and <= 10.3:
                 # Warren and BRandt (2008), fig 8
@@ -113,14 +113,14 @@ def get_error(ri):
                 # Estimated by Warren and Brandt (2008), in excess of Curtis et al. (2005)
                 for wb2008_k.txt in os.listdir(directory):
                     wb = open(filename, "r")
-                    wb_lines = wb.readlines()[1:]
+                    wb_lines = wb.readlines()[2:]
                     wb_wavel, k_266 = []
                     for wb_line in wb_lines:
                         wb_wavel.append(float(wb_line.split(' ')[0]))
                         k_266.append(float(wb_line.split(' ')[1]))
                     for curtis2005_k.txt in os.listdir(directory):
                         curtis = open(filename, "r")
-                        curtis_lines = curtis.readlines()[1:] # Should this be 3
+                        curtis_lines = curtis.readlines()[2:] # Should this be 3
                         curtis_wavel, k_176 = []
                         for curtis_line in curtis_lines:
                             curtis_wavel.append(10000/(float(line.split(' ')[0]))) # Convert freq in cm-1 to wavel in microns 
@@ -129,7 +129,7 @@ def get_error(ri):
                             dk = []
                             for j in range(len(curtis_lines):
                                 dk[j] = ((k_266[j] - k_176[j])/k_266[j]) 
-                            if wavel[i] = curtis_wavel[curtis_line]:
+                            if wavel[i] >= curtis_wavel[curtis_line] and < curtis_wavel[curtis_line]:
                                 ri.dk[i] = dk[curtis_line]
             if wavel[i] > 200:
             # Warren and Brandt (2008), fig 8
@@ -137,8 +137,8 @@ def get_error(ri):
 
     if ri.dataset == "bertie1969":
         # Calc from abs spec (dabs = 10 %)
-        dalpha = 0.10 #% error on absorption spectrum, Bertie et al. (1969)
-        ri.dk = calc_absorp.calc_error_from_dalpha(ri, dalpha)
+        perc_dalpha = 0.10 #% error on absorption spectrum, Bertie et al. (1969)
+        ri.dk = absorp_error.calc_error_from_dalpha(ri, perc_dalpha)
 
     if ri.dataset == "clapp1995":
         # No error reported
@@ -154,16 +154,16 @@ def get_error(ri):
         dalpha_array = []
         for perovich_1991_absorp_error.txt in os.listdir(directory):
             f = open(filename, "r")
-            lines = f.readlines()[1:] # Should this be 2?
+            lines = f.readlines()[2:] # Should this be 2?
             for i in lines:
                 dalpha_array.append(float(i.split(' ')[1]))
             
-            ri.dk = calc_absorp.perovich(ri, dalpha_array)
+                ri.dk = absorp_error.perovich(ri, dalpha_array)
 
     if ri.dataset == "leger1983":
         #Calc from abs spec
-        dalpha = 0.10 #% absolute error, Leger et al. (1983), p. 165
-        ri.dk = calc_absorp.calc_error_from_dalpha(ri, dalpha)
+        perc_dalpha = 0.10 #% absolute error, Leger et al. (1983), p. 165
+        ri.dk = calc_absorp.calc_error_from_dalpha(ri, perc_dalpha)
     
     if ri.dataset == "mukaiandkraetschmer1986":
         # No error reported
@@ -181,7 +181,7 @@ def get_error(ri):
 
     if ri.dataset == "browellandanderson1975":
         # Calc from abs spec
-        dalpha = 0.10 #% error on absorption coefficient, Browell and Anderson (1975)
-        ri.dk = calc_absorp.calc_error_from_dalpha(ri, dalpha)
+        perc_dalpha = 0.10 #% error on absorption coefficient, Browell and Anderson (1975)
+        ri.dk = calc_absorp.calc_error_from_dalpha(ri, perc_dalpha)
 
     return ri
