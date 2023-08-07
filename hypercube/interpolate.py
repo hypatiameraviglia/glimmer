@@ -8,8 +8,8 @@ import numpy as np
 from scipy.interpolate import LinearNDInterpolator
 
 #temperature bounds in Kelvin
-temp_max = 130
-temp_min = 200
+temp_max = 200
+temp_min = 130
 temp_step = 0.1
 
 #wavelength bounds in microns
@@ -19,14 +19,18 @@ wavel_step = 0.05
 
 def spline(ri):
     #Establish studied temperature and wavelength as 2d mesh (interpolation)
-    temp_axis = np.linspace(min(ri.temp), max(ri.temp), temp_step)
-    wavel_axis = np.linspace(min(ri.wavel), max(ri.wavel), wavel_step)
+    temp_axis_num = int((max(ri.temp) - min(ri.temp))/temp_step + 1)
+    temp_axis = np.linspace(min(ri.temp), max(ri.temp), temp_axis_num)
+    wavel_axis_num = int((max(ri.wavel) - min(ri.wavel))/wavel_step + 1)
+    wavel_axis = np.linspace(min(ri.wavel), max(ri.wavel), wavel_axis_num)
     temp_axis, wavel_axis = np.meshgrid(temp_axis, wavel_axis)
 
     #Establish goal temperature and wavelength as 2d mesh (extrapolation)
-    temp_extra = np.linspace(temp_min, temp_max, temp_step)
-    wavel_extra = np.linspace(wavel_min, wavel_max, wavel_step)
-    temp_extra, wavel_extra = np.meshgrid(extra_temp, extra_wavel)
+    temp_extra_num = int((temp_max - temp_min)/temp_step + 1)
+    temp_extra = np.linspace(temp_min, temp_max, temp_extra_num)
+    wavel_extra_num = int((wavel_max - wavel_min)/wavel_step + 1)
+    wavel_extra = np.linspace(wavel_min, wavel_max, wavel_extra_num)
+    temp_extra, wavel_extra = np.meshgrid(temp_extra, wavel_extra)
 
     #Interpolate and extrapolate n
     n_interp = LinearNDInterpolator(list(zip(ri.temp, ri.wavel)), ri.n)

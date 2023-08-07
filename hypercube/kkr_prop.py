@@ -9,31 +9,26 @@ from hypercube import ri
 
 def fft_on_k(ri):
 #Adapted from Warren Weckesser on stackoverflow
-    # pull imaginary index from object ri
-    k = ri.k
-
     # FFT of imaginary index
     #fft_k = fft(k)
 
-    # pull error on imaginary index from object ri
-    dk = ri.dk
-
     # FFT the k + dk
-    k_dk = [None]*len(k)
-    for i in k: 
-        k_dk[i] = k[i] + dk[i]
+    k_dk = [None]*len(ri.k)
+    for i in range(len(ri.k)): 
+        k_dk[i] = ri.k[i] + ri.dk[i]
 
-    fft_k_dk = fft.fft(k_dk, axis=-1)
+    fft_k_dk = fft(k_dk, axis=-1)
     
     # return fft_k_dk.var(axis=0)
     return fft_k_dk
 
 def fft_on_inv_wavel(ri):
-    # pull wavelength from object ri
-    wavel = ri.wavel
-
-    # set up fft(1/pi*wavel)
-    fft_wavel = fft.fft(1/(np.pi*wavel), axis=-1)
+    pi_wavel = [None]*len(ri.wavel)
+    for i in range(len(ri.wavel)):
+        # set up fft(1/pi*wavel)
+        pi_wavel[i] = 1/(np.pi*ri.wavel[i])
+    
+    fft_wavel = fft(pi_wavel, axis=-1)
     
     return fft_wavel
 

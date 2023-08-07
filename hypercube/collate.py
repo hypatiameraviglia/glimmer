@@ -1,6 +1,8 @@
 # Combine experimental data from multiple studies into one ri object for easier
 # interpolation and extrapolation
 
+import os
+
 from hypercube import ri
 from hypercube import read_in_lit
 from hypercube import interpolate
@@ -33,7 +35,7 @@ def avg_stacked_pts(ri_list):
                     for e in range(len(ri_list[a].temp)):
                         for f in range(len(ri_list[b].temp)):
                             if (ri_list[a].wavel[c] == ri_list[b].wavel[d] 
-                                and ri_list[a].temp[e] == ri_list[b].temp[f]:
+                                and ri_list[a].temp[e] == ri_list[b].temp[f]):
                                 # Average ks
                                 ri_list[a].k[c] = (ri_list[a].k[c] + ri_list[b].k[d])/2
                                 # Remove duplicate point (only avg persists)

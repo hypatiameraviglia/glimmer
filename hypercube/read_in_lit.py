@@ -1,25 +1,36 @@
 #Open .txt files from literature studies and populate ri objects with data
+
+import os
+
 from hypercube import ri
-from hypercube import calc_absorp
+from hypercube import absorp_error
 
 #Location of experimental data files
-directory = "~/scattering/lit"
+directory = "~/scattering/glimmer/lit"
 
 def read_data(directory):
     for filename in os.listdir(directory):
         if filename.endswith('.txt'):   #only the refrac files
-            f = open(filename, "r")
+            path = str(directory + "/" + filename)
+            f = open(path, "r")
+            lines = f.readlines()
 
             #refrac data by wavel
-            ri.dataset = f.readlines()[0]
-            ri.temp = f.readlines()[1]
-            lines = f.readlines()[3:]
-
-            for i in lines:
-                ri.wavel.append(float(i.split('   ')[1])) #check splitting chars
-                ri.n.append(float(i.split('   ')[2]))
-                ri.k.append(float(i.split('   ')[3]))
+            ri.dataset = lines[0]
+            ri.temp = lines[1]
+            data_lines = lines[4:]
+            wavel = []
+            n = []
+            k = []
+            for i in data_lines:
+                wavel.append(float(i.split('  ')[0])) #check splitting chars
+                n.append(float(i.split('  ')[1]))
+                k.append(float(i.split('  ')[2]))
     
+            ri.wavel = wavel
+            ri.n = n
+            ri.k = k
+
             f.close()
     
     return ri
@@ -64,18 +75,18 @@ def get_error(ri):
                         k_min.append(float(line.split(' ')[2]))
                         k_max.append(float(line.split(' ')[3]))
                         dk[line] = k_max[line] - k_min[line]
-                        if wavel[i] >= wavel[line] and < wavel[line + 1]:
+                        if wavel[i] >= wavel[line] and wavel[i] < wavel[line + 1]:
                             ri.dk[i] = dk[line]
-            if wavel[i] > 0.6 and < 0.7:
+            if wavel[i] > 0.6 and wavel[i] < 0.7:
                 #Grenfell and Perovich (1981), table 1
                 ri.dk[i] = ri.k[i]*0.10
-            if wavel[i] >= 0.7 and < 1:
+            if wavel[i] >= 0.7 and wavel[i] < 1:
                 #Grenfell and Perovich (1981), table 1
                 ri.dk[i] = ri.k[i]*0.08
-            if wavel[i] >= 1 and <= 1.4:
+            if wavel[i] >= 1 and wavel[i] <= 1.4:
                 #Grenfell and Perovich (1981), table 1
                 ri.dk[i] = ri.k[i]*0.10
-            if wavel[i] > 1.4 and <= 2.9:
+            if wavel[i] > 1.4 and wavel[i] <= 2.9:
                 #Gosse et al. (1995), table 1
                 for gosse1995_dk.txt in os.listdir(directory):
                     f = open(filename, "r")
@@ -84,15 +95,15 @@ def get_error(ri):
                     for line in lines:
                         wavel.append(float(line.split(' ')[0]))
                         perc_err.append(float(line.split(' ')[1]))
-                        if wavel[i] >= wavel[line] and < wavel[line + 1]:
+                        if wavel[i] >= wavel[line] and wavel[i] < wavel[line + 1]:
                             ri.dk[i] = ri.k[i]*perc_err[line]
 
-            if wavel[i] > 2.9 and < 3.4:
+            if wavel[i] > 2.9 and wavel[i] < 3.4:
                 #Could not find Schaaf and Williams (1973), table 3
                 # Instead, estimated error from plot of k uncertainties
                 # in Warren and Brandt (2008) figure 8
                ri.dk[i] = ri.k[i]*0.10 
-            if wavel[i] >= 3.4 and <= 7.8125:
+            if wavel[i] >= 3.4 and wavel[i] <= 7.8125:
                 #Gosse et al. (1995), table 1
                 for gosse1995_dk.txt in os.listdir(directory):
                     f = open(filename, "r")
@@ -101,15 +112,15 @@ def get_error(ri):
                     for line in lines:
                         wavel.append(float(line.split(' ')[0]))
                         perc_err.append(float(line.split(' ')[1]))
-                        if wavel[i] >= wavel[line] and < wavel[line + 1]:
+                        if wavel[i] >= wavel[line] and wavel[i] < wavel[line + 1]:
                             ri.dk[i] = ri.k[i]*perc_err[line]
-            if wavel[i] > 7.8125 and <= 10.3:
+            if wavel[i] > 7.8125 and wavel[i] <= 10.3:
                 # Warren and BRandt (2008), fig 8
                 ri.dk[i] = ri.k[i]*0.10
-            if wavel[i] > 10.3 and <= 26:
+            if wavel[i] > 10.3 and wavel[i] <= 26:
                 # Warren and Brandt (2008), fig 8
                 ri.dk[i] = ri.k[i]*0.70
-            if wavel[i] > 26 and <= 200:
+            if wavel[i] > 26 and wavel[i] <= 200:
                 # Estimated by Warren and Brandt (2008), in excess of Curtis et al. (2005)
                 for wb2008_k.txt in os.listdir(directory):
                     wb = open(filename, "r")
@@ -127,9 +138,9 @@ def get_error(ri):
                             k_176.append(float(line.split(' ')[1]))
                             # Calculation of dk according to Warren and Brandt (2008)'s uncertainty estimation on pg. 7
                             dk = []
-                            for j in range(len(curtis_lines):
+                            for j in range(len(curtis_lines)):
                                 dk[j] = ((k_266[j] - k_176[j])/k_266[j]) 
-                            if wavel[i] >= curtis_wavel[curtis_line] and < curtis_wavel[curtis_line]:
+                            if wavel[i] >= curtis_wavel[curtis_line] and wavel[i] < curtis_wavel[curtis_line]:
                                 ri.dk[i] = dk[curtis_line]
             if wavel[i] > 200:
             # Warren and Brandt (2008), fig 8
