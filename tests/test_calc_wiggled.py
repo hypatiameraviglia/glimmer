@@ -10,15 +10,15 @@ class TestCalcWiggled(unittest.TestCase):
 
     def setUp(self):
         #runs before each test in class
-        self.ri = ri.ri("leger1983", [1, 2, 3], [200, 200, 200], "pe", [0.5, 0.4, 0.3], [0.2, 0.2, -0.2], [0, 0, 0], [0, 0, 0])
+        self.ri = ri.ri("leger1983", [1, 2, 3], [200, 150, 180], "pe", [0.5, 0.4, 0.3], [0.2, 0.2, -0.2], [0, 0, 0], [0, 0, 0])
 
     def test_wiggled_ris_are_list(self):
-        result = calc_wiggled.wiggle_indices_n_times(self.ri)
+        result = calc_wiggled.wiggle_indices_n_times(self.ri)[1]
         #print("\nresult is ", result)
         self.assertEqual(type(result), type([]))
 
     def test_wiggled_ris_are_n_long(self):
-        result = calc_wiggled.wiggle_indices_n_times(self.ri)
+        result = calc_wiggled.wiggle_indices_n_times(self.ri)[1]
         #print("\nresult is ", result)
         self.assertEqual(len(result), calc_wiggled.num_wiggled_indices)
 
@@ -26,30 +26,36 @@ class TestCalcWiggled(unittest.TestCase):
         result = calc_wiggled.extrapolate_wiggled_ris(calc_wiggled.wiggle_indices_n_times(self.ri))[0]
         print("\nresult is ", result)
         nmin = 0.3 # Lowest n point in sample data
-        self.assertGreaterThan(result, nmin)
+        for avg in result:
+            self.assertGreaterThan(avg, nmin)
 
     def test_n_avg_is_below_max(self):
         result = calc_wiggled.extrapolate_wiggled_ris(calc_wiggled.wiggle_indices_n_times(self.ri))[0]
         nmax = 0.5
-        self.assertLessThan(result, nmax)
+        for avg in result:
+            self.assertLessThan(avg, nmax)
 
     def test_k_avg_is_above_min(self):
         result = calc_wiggled.extrapolate_wiggled_ris(calc_wiggled.wiggle_indices_n_times(self.ri))[2]
         kmin = -0.2
-        self.assertGreaterThan(result, kmin)
+        for avg in result:
+            self.assertGreaterThan(avg, kmin)
 
     def test_k_avg_is_below_max(self):
         result = calc_wiggled.extrapolate_wiggled_ris(calc_wiggled.wiggle_indices_n_times(self.ri))[2]
         kmax = 0.2
-        self.assertLessThan(result, kmax)
+        for avg in result:
+            self.assertLessThan(avg, kmax)
 
     def test_n_stdev_above_min(self):
         result = calc_wiggled.extrapolate_wiggled_ris(calc_wiggled.wiggle_indices_n_times(self.ri))[1]
         stdevmin = 0
-        self.assertGreaterThan(result, stdevmin)
+        for stdev in result:
+            self.assertGreaterThan(stdev, stdevmin)
 
     def test_k_stdev_above_min(self):
         result = calc_wiggled.extrapolate_wiggled_ris(calc_wiggled.wiggle_indices_n_times(self.ri))[3]
         stdevmin = 0
-        self.assertGreaterThan(result, stdevmin)
+        for stdev in result:
+            self.assertGreaterThan(stdev, stdevmin)
 

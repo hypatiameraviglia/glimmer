@@ -13,10 +13,10 @@ class ri:
         self.nmin = [ ni - ni*dni for ni in n for dni in dn ]
         self.kmax = [ ki + ki*dki for ki in k for dki in dk ]
         self.kmin = [ ki - ki*dki for ki in k for dki in dk ]
-        self.n_avg = [] # Calculated by calc_wiggled.extrapolate_wiggled_ris
-        self.k_avg = []
-        self.n_stdev = []
-        self.k_stdev = []
+        self.n_avg = [None]*len(wavel) # Calculated by calc_wiggled.extrapolate_wiggled_ris
+        self.k_avg = [None]*len(wavel)
+        self.n_stdev = [None]*len(wavel)
+        self.k_stdev = [None]*len(wavel)
     def __str__(self, dataset, wavel, n, k, dn, dk):
         print("{self.dataset} is a group of refractive indices of length ", len(n))
 

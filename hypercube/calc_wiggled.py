@@ -7,7 +7,7 @@ from hypercube import ri_wiggler
 from hypercube import ri
 from hypercube import interpolate
 
-num_wiggled_indices = 100
+num_wiggled_indices = 10
 
 #TODO: read in # of wavels
 
@@ -19,7 +19,8 @@ def wiggle_indices_n_times(ri):
         ri_copy = ri_wiggler.copy_ri(ri)
         #Wiggle each n and k at each wavelength point in list
         wiggled_ris[i] = ri_wiggler.wiggle_indices(ri_copy)
-    return wiggled_ris
+    pack = (ri, wiggled_ris)
+    return pack
 
 """
 def interpolate_wiggled_ris(wiggled_ris):
@@ -28,14 +29,20 @@ def interpolate_wiggled_ris(wiggled_ris):
         #For each n and k at each wavel, find avg and stdev across wiggles
 """
 
-def extrapolate_wiggled_ris(wiggled_ris):
+def extrapolate_wiggled_ris(pack):
+    ri = pack[0]
+    wiggled_ris = pack[1]
     #Extrapolate via spline
+    n_extra = [None]*num_wiggled_indices
+    k_extra = [None]*num_wiggled_indices
     for i in range(num_wiggled_indices):
         n_extra[i] = interpolate.spline(wiggled_ris[i])[6]
         k_extra[i] = interpolate.spline(wiggled_ris[i])[8]
 
     #For each n and k at each wavel, find avg and stdev across wiggles
-    for i in range(len(ri.wavel)):
+    #print("len of ri.n_avg: ", len(ri.n_avg))
+    #print("len of wiggled_ris[0].wavel: ", len(wiggled_ris[0].wavel))
+    for i in range(len(wiggled_ris[0].wavel)):
         ri.n_avg[i] = np.average(n_extra[i])
         ri.n_stdev[i] = np.std(n_extra[i])
         ri.k_avg[i] = np.average(k_extra[i])

@@ -38,7 +38,8 @@ class TestCollate(unittest.TestCase):
 # Tests of avg_stacked_pts
     def test_avgd_ks_in_array(self):
         avgd_ri_list = collate.avg_stacked_pts(collate.read_all_data(ri, self.directory))
-        self.assertEqual(type(avgd_ri_list.k), type([]))
+        for obj in avgd_ri_list:
+            self.assertEqual(type(obj.k), type([]))
 
     def test_avgd_ks_are_floats(self):
         avgd_ri_list = collate.avg_stacked_pts(collate.read_all_data(ri, self.directory))
@@ -48,7 +49,8 @@ class TestCollate(unittest.TestCase):
 
     def test_adjd_dks_in_array(self):
         avgd_ri_list = collate.avg_stacked_pts(collate.read_all_data(ri, self.directory))
-        self.assertEqual(tyep(avgd_ri_list.dk), type([]))
+        for obj in avgd_ri_list:
+            self.assertEqual(type(obj.dk), type([]))
 
     def test_adjd_dks_are_floats(self):
         avgd_ri_list = collate.avg_stacked_pts(collate.read_all_data(ri, self.directory))
@@ -79,6 +81,10 @@ class TestCollate(unittest.TestCase):
         collated_ri = collate.collate(ri, collate.avg_stacked_pts(collate.read_all_data(ri, self.directory)))
         for wavel in collated_ri.wavel:
             self.assertEqual(type(wavel), type(float(0.1)))
+    
+    def test_collated_wavels_correct_len(self):
+        collated_ri = collate.collate(ri, collate.avg_stacked_pts(collate.read_all_data(ri, self.directory)))
+        self.assertEqual(len(collated_ri.wavel), 84)
 
     def test_collated_temps_in_array(self):
         collated_ri = collate.collate(ri, collate.avg_stacked_pts(collate.read_all_data(ri, self.directory)))
@@ -120,14 +126,14 @@ class TestCollate(unittest.TestCase):
 
     def test_avgd_ks_correct(self):
         collated_ri = collate.collate(ri, collate.avg_stacked_pts(collate.read_all_data(ri, self.directory)))
-        for i in range(len(collated_ri)):
+        for i in range(len(collated_ri.wavel)):
             if collated_ri.wavel[i] == 2.5:
                 self.assertEqual(collated_ri.k[i], 0.5)
                 #Hand calculated avg of 0 and 1
 
     def test_adjd_dks_correct(self):
         collated_ri = collate.collate(ri, collate.avg_stacked_pts(collate.read_all_data(ri, self.directory)))
-        for i in range(len(collated_ri)):
+        for i in range(len(collated_ri.wavel)):
             if collated_ri.wavel == 2.5:
                 self.assertEqual(collated_ri.dk[i], 0.1)
                 #Hand calculated combined error between 20% and 30% of 1 and 0 respectively. See collate.avg_stacked_pts for equation
