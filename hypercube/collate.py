@@ -39,40 +39,51 @@ def avg_stacked_pts(ri_list):
     print("len temp in ri_list[1]: ", len(ri_list[1].temp))
     print("len k in ri_list[1]: ", len(ri_list[1].k))
     print("len dk in ri_list[1]: ", len(ri_list[1].dk))
-
-    for a in range(len(ri_list)):
-        for b in range(len(ri_list)):
-            for c in range(len(ri_list[a].wavel)):
-                for d in range(len(ri_list[b].wavel)):
-                    if (ri_list[a].wavel[c] == ri_list[b].wavel[d]) and (ri_list[a].temp == ri_list[b].temp):
-                        print("a: ", a)
-                        print("b: ", b)
-                        print("c: ", c)
-                        print("d: ", d)
+    for ri_1 in ri_list:
+        for ri_2 in ri_list:
+            for wavel_1 in ri_1.wavel:
+                for wavel_2 in ri_2.wavel:
+                    if ri_1 != ri_2 and wavel_1 == wavel_2 and ri_1.temp == ri_2.temp:
+                        #print("a: ", a)
+                        #print("b: ", b)
+                        #print("c: ", c)
+                        #print("d: ", d)
                         # Average ks
+                        a = ri_list.index(ri_1)
+                        b = ri_list.index(ri_2)
+                        c = ri_1.wavel.index(wavel_1)
+                        d = ri_2.wavel.index(wavel_2)
                         ri_list[a].k[c] = (ri_list[a].k[c] + ri_list[b].k[d])/2
                 
                         # Remove duplicate point (only avg persists)
-                        del(ri_list[b].k[d])
-                        del(ri_list[b].wavel[d])
-                        del(ri_list[b].dk[d])
+                        #del(ri_list[b].k[d])
+                        #del(ri_list[b].wavel[d])
+                        #del(ri_list[b].dk[d])
                 
                         # Combine dks (assumes dks are same units as k, not % error)
-                        #print("ri_list[a].dk[c]: ", ri_list[a].dk[c])
-                        #print("ri_list[a].k[a]: ", ri_list[a].k[c])
-                        #print("ri_list[b].dk[d]: ", ri_list[b].dk[d])
-                        #print("ri_list[b].k[d]: ", ri_list[b].k[d])
+                        #Index error here, not above
+                        print("ri_list[a].dk[c]: ", ri_list[a].dk[c])
+                        print("ri_list[a].k[a]: ", ri_list[a].k[c])
+                        print("ri_list[b].dk[d]: ", ri_list[b].dk[d])
+                        print("ri_list[b].k[d]: ", ri_list[b].k[d])
                         ri_list[a].dk[c]  = ri_list[a].k[c]*(np.sqrt((((ri_list[a].dk[c])/(ri_list[a].k[c]))**2) + (((ri_list[b].dk[d])/(ri_list[b].k[d])**2))))
                 
                         # Remove duplicate point
                         del(ri_list[b].dk[d])
     return ri_list
+"""
+    for a in range(len(ri_list)):
+        for b in range(len(ri_list)):
+            for c in range(len(ri_list[a].wavel)):
+                for d in range(len(ri_list[b].wavel)):
+                    if (ri_list[a].wavel[c] == ri_list[b].wavel[d]) and (ri_list[a].temp == ri_list[b].temp):
+"""
 
 def collate(ri, ri_list):
 
-    #Initialize empty object of class ri
-    collated_ri = ri()
-
+    #Initialize object of class ri, add in first ri from list
+    collated_ri = ri_list[0]
+    del(ri_list[0])
     # Does it matter if they're in order of temp and wavel as long as the 
     # ri data stays with its correct w/t coord?
     # I don't think it matters for KKR, absorp_error, and ik it doesn't
