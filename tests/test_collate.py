@@ -42,8 +42,8 @@ class TestCollate(unittest.TestCase):
 
     def test_avgd_ks_are_floats(self):
         avgd_ri_list = collate.avg_stacked_pts(collate.read_all_data(ri, self.directory))
-        for ri in avgd_ri_list:
-            for k in ri.k:
+        for obj in avgd_ri_list:
+            for k in obj.k:
                 self.assertEqual(type(k), type(float(0.1)))
 
     def test_adjd_dks_in_array(self):

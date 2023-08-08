@@ -14,4 +14,4 @@ class TestCalcWiggled(unittest.TestCase):
     def test_errors_are_list(self):
         result = kkr_prop.inv_fft(kkr_prop.fft_on_k(self.ri), kkr_prop.fft_on_inv_wavel(self.ri))
         print("\nresult is ", result)
-        self.IsInstance(result, [])
+        self.assertEqual(type(result), type([]))

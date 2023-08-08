@@ -8,49 +8,61 @@ from hypercube import absorp_error
 #Location of experimental data files
 directory = "~/scattering/glimmer/lit"
 
-def read_data(directory):
-    for filename in os.listdir(directory):
-        if filename.endswith('.txt'):   #only the refrac files
-            path = str(directory + "/" + filename)
-            f = open(path, "r")
-            lines = f.readlines()
-
-            #refrac data by wavel
-            ri.dataset = lines[0]
-            ri.temp = lines[1]
-            data_lines = lines[4:]
-            wavel = []
-            n = []
-            k = []
-            for i in data_lines:
-                wavel.append(float(i.split('  ')[0])) #check splitting chars
-                n.append(float(i.split('  ')[1]))
-                k.append(float(i.split('  ')[2]))
+def read_data(directory, filename):
+    path = str(directory + "/" + filename)
+    f = open(path, "r")
+    lines = f.readlines()
+        
+    #refrac data by wavel
+    ri.dataset = lines[0]
+    #print(ri.dataset)
+    ri.temp = lines[1]
+    #print(ri.temp)
+    data_lines = lines[4:]
+    wavel = n = k = []
+    for i in data_lines:
+        wavel.append(float(i.split('  ')[0])) #check splitting chars
+        #print("wavelengths: ", wavel)
+        n.append(float(i.split('  ')[1]))
+        #print("ns: ", n)
+        k.append(float(i.split('  ')[2]))
+        #print("ks: ", k)
     
-            ri.wavel = wavel
-            ri.n = n
-            ri.k = k
+    ri.wavel = wavel
+    ri.n = n
+    ri.k = k
+    ri.dn = [None]*len(ri.wavel)
+    ri.dk = [None]*len(ri.wavel)
+    ri.n_avg = [None]*len(ri.wavel)
+    ri.k_avg = [None]*len(ri.wavel)
+    ri.n_stdev = [None]*len(ri.wavel)
+    ri.k_stdev = [None]*len(ri.wavel)
 
-            f.close()
-    
+    f.close()
     return ri
 
 def get_error(ri):
+    #trigger = False
+    #print("ri.dataset before get_error: ", ri.dataset)
+    #print("evaluating filename: ", bool(ri.dataset == "test2023\n"))
+    #print("ri.dk: ", ri.dk)
 #Populate error based on study; see respective papers
-    if ri.dataset == "test2023":
+    if ri.dataset == "test2023\n":
     #Test file
+        #trigger = True
         for i in range(len(ri.k)):
             ri.dk[i] = ri.k[i]*0.20
     #Test file
-    if ri.dataset == "test2024":
+    if ri.dataset == "test2024\n":
+        trigger = True
         for i in range(len(ri.k)):
             ri.dk[i] = ri.k[i]*0.30
     # Start of real data
-    if ri.dataset == "warren1984":
+    if ri.dataset == "warren1984\n":
         for i in range(len(ri.k)):
             ri.dk[i] = ri.k[i]*0.20
 
-    if ri.dataset == "mastrapa2008_Ic":
+    if ri.dataset == "mastrapa2008_Ic\n":
         # Couldn't find reported error for Mastrapa et al. 2008, although
         # they note substantial error in high transmittance areas.
         # Error estimated at a flat 20%, which is on the upper end of 
@@ -58,11 +70,11 @@ def get_error(ri):
         for i in range(len(ri.k)):
             ri.dk[i] = ri.k[i]*0.20
     
-    if ri.dataset == "toon1994":
+    if ri.dataset == "toon1994\n":
         for i in range(len(ri.k)):
             ri.dk[i] = ri.k[i]*0.20
 
-    if ri.dataset == "warrenbrandt2008":
+    if ri.dataset == "warrenbrandt2008\n":
         for i in range(len(ri.wavel)):
             if wavel[i] <= 0.6: #microns
                 #Warren and Brandt (2006), fig 7
@@ -146,21 +158,21 @@ def get_error(ri):
             # Warren and Brandt (2008), fig 8
                 ri.dk[i] = ri.k[i]*0.10
 
-    if ri.dataset == "bertie1969":
+    if ri.dataset == "bertie1969\n":
         # Calc from abs spec (dabs = 10 %)
         perc_dalpha = 0.10 #% error on absorption spectrum, Bertie et al. (1969)
         ri.dk = absorp_error.calc_error_from_dalpha(ri, perc_dalpha)
 
-    if ri.dataset == "clapp1995":
+    if ri.dataset == "clapp1995\n":
         # No error reported
         for i in range(len(ri.k)):
             ri.dk[i] = ri.k[i]*0.20
 
-    if ri.dataset == "he2022":
+    if ri.dataset == "he2022\n":
         for i in range(len(ri.k)):
             ri.dk[i] = ri.k[i]*0.01
     
-    if ri.dataset == "perovichandgovoni1991":
+    if ri.dataset == "perovichandgovoni1991\n":
         # Error by data point
         dalpha_array = []
         for perovich_1991_absorp_error.txt in os.listdir(directory):
@@ -171,28 +183,29 @@ def get_error(ri):
             
                 ri.dk = absorp_error.perovich(ri, dalpha_array)
 
-    if ri.dataset == "leger1983":
+    if ri.dataset == "leger1983\n":
         #Calc from abs spec
         perc_dalpha = 0.10 #% absolute error, Leger et al. (1983), p. 165
         ri.dk = calc_absorp.calc_error_from_dalpha(ri, perc_dalpha)
     
-    if ri.dataset == "mukaiandkraetschmer1986":
+    if ri.dataset == "mukaiandkraetschmer1986\n":
         # No error reported
         for i in range(len(ri.k)):
             ri.dk[i] = ri.k[i]*0.20
 
-    if ri.dataset == "hudgins1993":
+    if ri.dataset == "hudgins1993\n":
         for i in range(len(ri.k)):
             ri.dk[i] = ri.k[i]*0.05
 
-    if ri.dataset == "mastrapa2008_Ia":
+    if ri.dataset == "mastrapa2008_Ia\n":
         # Couldn't find reported error, estimated 20%
         for i in range(len(ri.k)):
             ri.dk[i] = ri.k[i]*0.20
 
-    if ri.dataset == "browellandanderson1975":
+    if ri.dataset == "browellandanderson1975\n":
         # Calc from abs spec
         perc_dalpha = 0.10 #% error on absorption coefficient, Browell and Anderson (1975)
         ri.dk = calc_absorp.calc_error_from_dalpha(ri, perc_dalpha)
-
-    return ri
+    #print("ri.dk after get_error: ", ri.dk)
+    #print("trigger value: ", trigger)
+    return ri.dk

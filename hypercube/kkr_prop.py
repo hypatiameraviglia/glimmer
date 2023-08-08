@@ -33,10 +33,9 @@ def fft_on_inv_wavel(ri):
     return fft_wavel
 
 def inv_fft(fft_k_dk, fft_wavel):
-    dn = fft.ifft(fft_k_dk*fft_wavel)
+    dn = np.fft.ifft(fft_k_dk*fft_wavel)
     
-    n = ri.n
-    for i in n:
+    for i in range(len(dn)):
         ri.dn[i] = dn[i]
     
     return dn

@@ -5,10 +5,10 @@ class ri:
         self.dataset = dataset
         self.errortype = errortype
         self.temp = [ float(x) for x in temp ]
-        self.n = [ float(x) for x in temp ]
+        self.n = [ float(x) for x in temp ] #Calculated in kkr.py
         self.k = [ float(x) for x in k ]
-        self.dn = [ float(x) for x in dn ]
-        self.dk = [ float(x) for x in dk ]
+        self.dn = [ float(x) for x in dn ] #Calculated in kkr_prop.py
+        self.dk = [ float(x) for x in dk ] #Calculated in read_in_lit.py
         self.nmax = [ ni + ni*dni for ni in n for dni in dn ]
         self.nmin = [ ni - ni*dni for ni in n for dni in dn ]
         self.kmax = [ ki + ki*dki for ki in k for dki in dk ]
@@ -18,5 +18,5 @@ class ri:
         self.n_stdev = []
         self.k_stdev = []
     def __str__(self, dataset, wavel, n, k, dn, dk):
-        print("{self.dataset} is a group of ref. ind. of length ", len(n))
+        print("{self.dataset} is a group of refractive indices of length ", len(n))
 
