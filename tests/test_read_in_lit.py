@@ -67,4 +67,4 @@ class TestReadInLit(unittest.TestCase):
         k = read_in_lit.read_data(self.directory, self.filename).k
         dk = read_in_lit.get_error(read_in_lit.read_data(self.directory, self.filename))
         for i in range(len(dk)):
-            self.assertEqual(dk[i]/k[i], 0.20)
+            self.assertAlmostEqual(dk[i]/k[i], 0.20, places=10)

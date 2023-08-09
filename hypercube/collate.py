@@ -3,6 +3,7 @@
 
 import os
 import numpy as np
+import copy
 
 from hypercube import ri
 from hypercube import read_in_lit
@@ -16,14 +17,36 @@ def read_all_data(ri, directory):
     # ri objects
 
     ri_list = []
+    i = 0
     
     for filename in os.listdir(directory):
         if filename.endswith('.txt'):   #only the refrac files
-            ri_list.append(read_in_lit.read_data(directory, filename))
-
+            #print("files in dir that end with .txt: ", filename)
+            #Create ri object populated with data from txt files
+            data = read_in_lit.read_data(directory, filename)
+            #print("data before deepcopy: ", data.dataset)
+            #Get dks
+            data.dk = read_in_lit.get_error(data)
+            #Deepcopy each attribute in data to avoid overwriting
+            dc_data = ri.ri("", [-1], [-1], "", [0], [0], [0], [0]) #Nonsense val
+            dc_data.dataset = copy.deepcopy(data.dataset)
+            dc_data.wavel = copy.deepcopy(data.wavel)
+            dc_data.temp = copy.deepcopy(data.temp)
+            #dc_data.errortype = copy.deepcopy(data.errortype)
+            dc_data.n = copy.deepcopy(data.n)
+            dc_data.k = copy.deepcopy(data.k)
+            dc_data.dn = copy.deepcopy(data.dn)
+            dc_data.dk = copy.deepcopy(data.dk)
+            #print("deepcopy of read data: ", dc_data.dataset)
+            #Add deepcopy to list of ris
+            ri_list.append(dc_data)
+            
+    #print("ri_list after reading in data: ", ri_list[0].dataset, ", ", ri_list[1].dataset)
+    
     for ri_obj in ri_list:
-        ri_obj = read_in_lit.get_error(ri_obj)
-        #print("datasets pulled by collate.py: ", ri_obj.dataset)
+        ri_obj.dk = read_in_lit.get_error(ri_obj)
+        #print("ks pulled by collate.py: ", ri_obj.k)
+        #print("dataset from ri_list: ", ri_obj.dataset)
     return ri_list
 
 def avg_stacked_pts(ri_list):
@@ -32,6 +55,8 @@ def avg_stacked_pts(ri_list):
     # average em
     for ri_1 in ri_list:
         for ri_2 in ri_list:
+            #print("dataset of ri_1: ", ri_1.dataset)
+            #print("dataset of ri_2: ", ri_2.dataset)
             for wavel_1 in ri_1.wavel:
                 for wavel_2 in ri_2.wavel:
                     if ri_1 != ri_2 and wavel_1 == wavel_2 and ri_1.temp == ri_2.temp:
@@ -44,11 +69,11 @@ def avg_stacked_pts(ri_list):
                 
                         # Combine dks (assumes dks are same units as k, not % error)
                         #Index error here, not above
-                        print("ri_list[a].dk[c]: ", ri_list[a].dk[c])
-                        print("ri_list[a].k[a]: ", ri_list[a].k[c])
-                        print("ri_list[b].dk[d]: ", ri_list[b].dk[d])
-                        print("ri_list[b].k[d]: ", ri_list[b].k[d])
-                        ri_list[a].dk[c]  = ri_list[a].k[c]*(np.sqrt((((ri_list[a].dk[c])/(ri_list[a].k[c]))**2) + (((ri_list[b].dk[d])/(ri_list[b].k[d])**2))))
+                        #print("ri_list[a].dk[c]: ", ri_list[a].dk[c])
+                        #print("ri_list[a].k[a]: ", ri_list[a].k[c])
+                        #print("ri_list[b].dk[d]: ", ri_list[b].dk[d])
+                        #print("ri_list[b].k[d]: ", ri_list[b].k[d])
+                        ri_list[a].dk[c]  = float(ri_list[a].k[c]*(np.sqrt((((ri_list[a].dk[c])/(ri_list[a].k[c]))**2) + (((ri_list[b].dk[d])/(ri_list[b].k[d])**2)))))
                 
                         # Remove duplicate point
                         del(ri_list[b].dk[d])
@@ -89,7 +114,7 @@ def collate(ri, ri_list):
     # of rows. So adding each column separately shouldn't disturb the index
     # of rows in each distinct ri relative to each other
     for obj in ri_list:
-        collated_ri.wavel = collated_ri.wavel + obj.wavel
+        collated_ri.wavel.extend(obj.wavel)
         collated_ri.temp = collated_ri.temp + obj.temp
         collated_ri.k = collated_ri.k + obj.k
         collated_ri.dk = collated_ri.dk + obj.dk

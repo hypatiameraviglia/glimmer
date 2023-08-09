@@ -42,6 +42,8 @@ def extrapolate_wiggled_ris(pack):
     #For each n and k at each wavel, find avg and stdev across wiggles
     #print("len of ri.n_avg: ", len(ri.n_avg))
     #print("len of wiggled_ris[0].wavel: ", len(wiggled_ris[0].wavel))
+    #print("n_extra: ", n_extra)
+    #print("k_extra: ", k_extra)
     for i in range(len(wiggled_ris[0].wavel)):
         ri.n_avg[i] = np.average(n_extra[i])
         ri.n_stdev[i] = np.std(n_extra[i])

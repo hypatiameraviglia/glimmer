@@ -81,8 +81,14 @@ class TestRIClass(unittest.TestCase):
         for nmin in self.ri.nmin:
             self.assertEqual(type(nmin), type(float(0.1)))
 
-    def test_nmin_correct(self):
-        self.assertEqual(self.ri.nmin, [0.4, 0.3, 0.2])
+    def test_nmin_0_correct(self):
+        self.assertAlmostEqual(self.ri.nmin[0], 0.4, places=10)
+
+    def test_nmin_1_correct(self):
+        self.assertAlmostEqual(self.ri.nmin[1], 0.3, places=10)
+
+    def test_nmin_2_correct(self):
+        self.assertAlmostEqual(self.ri.nmin[2], 0.2, places=10)
 
     def test_kmax_is_array(self):
         self.assertEqual(type(self.ri.kmax), type([]))
@@ -91,8 +97,14 @@ class TestRIClass(unittest.TestCase):
         for kmax in self.ri.kmax:
             self.assertEqual(type(kmax), type(float(0.1)))
 
-    def test_kmax_correct(self):
-        self.assertEqual(self.ri.kmax, [0.3, 0.3, -0.1])
+    def test_kmax_0_correct(self):
+        self.assertAlmostEqual(self.ri.kmax[0], 0.3, places=10)
+
+    def test_kmax_1_correct(self):
+        self.assertAlmostEqual(self.ri.kmax[1], 0.3, places=10)
+
+    def test_kmax_2_correct(self):
+        self.assertAlmostEqual(self.ri.kmax[2], -0.1, places=10)
 
     def test_kmin_is_array(self):
         self.assertEqual(type(self.ri.kmin), type([]))
@@ -101,5 +113,11 @@ class TestRIClass(unittest.TestCase):
         for kmin in self.ri.kmin:
             self.assertEqual(type(kmin), type(float(0.1)))
 
-    def test_kmin_correct(self):
-        self.assertEqual(self.ri.kmin, [0.1, 0.1, -0.3])
+    def test_kmin_0_correct(self):
+        self.assertAlmostEqual(self.ri.kmin[0], 0.1, places=10)
+    
+    def test_kmin_1_correct(self):
+        self.assertAlmostEqual(self.ri.kmin[1], 0.1, places=10)
+
+    def test_kmin_2_correct(self):
+        self.assertAlmostEqual(self.ri.kmin[2], -0.3, places=10)

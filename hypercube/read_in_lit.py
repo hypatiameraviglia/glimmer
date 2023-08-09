@@ -19,14 +19,18 @@ def read_data(directory, filename):
     ri.temp = lines[1]
     #print(ri.temp)
     data_lines = lines[4:]
-    wavel = n = k = []
+    wavel = []
+    n = []
+    k = []
     for i in data_lines:
-        wavel.append(float(i.split('  ')[0])) #check splitting chars
+        line = i.split('  ')
+        #print("line split into array by read_lin_lit: ", line)
+        wavel.append(float(line[0])) #check splitting chars
         #print("wavelengths: ", wavel)
-        n.append(float(i.split('  ')[1]))
+        n.append(float(line[1]))
         #print("ns: ", n)
-        k.append(float(i.split('  ')[2]))
-        #print("ks: ", k)
+        k.append(float(line[2]))
+        #print("ks read in by read_in_lit: ", k)
     
     ri.wavel = wavel
     ri.n = n

@@ -36,12 +36,14 @@ def spline(ri):
     n_interp = LinearNDInterpolator(list(zip(ri.temp, ri.wavel)), ri.n)
     n_axis = n_interp(temp_axis, wavel_axis)
     n_extra = n_interp(temp_extra, wavel_extra)
+    #print("n_extra from interpolate: ", n_extra)
 
     #Interpolate and extrapolate k
     k_interp = LinearNDInterpolator(list(zip(ri.temp, ri.wavel)), ri.k)
     k_axis = k_interp(temp_axis, wavel_axis)
     k_extra = k_interp(temp_extra, wavel_extra)
-
+    #print("k_extra from interpolate: ", k_extra)
+    
     #Interpolate and extrapolate dn
     dn_interp = LinearNDInterpolator(list(zip(ri.temp, ri.wavel)), ri.dn)
     dn_axis = dn_interp(temp_axis, wavel_axis)
