@@ -16,7 +16,7 @@ def read_data(directory, filename):
     #refrac data by wavel
     ri.dataset = lines[0]
     #print(ri.dataset)
-    ri.temp = lines[1]
+    ri.temp = float(lines[1])
     #print(ri.temp)
     data_lines = lines[4:]
     wavel = []

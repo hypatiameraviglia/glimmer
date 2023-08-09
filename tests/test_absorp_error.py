@@ -31,10 +31,10 @@ class TestAbsorpError(unittest.TestCase):
 
     def test_dks_greater_than_min(self):
         #Hand-calculated minimum dk -- at lowest test wavelength (1), dk
-        #(by the equation in absorp_error.py) is 0.0079577
+        #(by the equation in absorp_error.py) is 1.5915494309E-07
         result = absorp_error.calc_error_from_dalpha(self.ri, self.dalpha)
         min_dk = min(result)
-        self.assertGreaterEqual(min_dk, 0.0079577)
+        self.assertAlmostEqual(min_dk, 1.5915494309E-07, places=10)
 
     def test_dks_less_than_max(self):
         #Hand calculated maximum dk at greatest wavelength

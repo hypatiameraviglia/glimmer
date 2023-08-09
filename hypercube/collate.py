@@ -115,7 +115,10 @@ def collate(ri, ri_list):
     # of rows in each distinct ri relative to each other
     for obj in ri_list:
         collated_ri.wavel.extend(obj.wavel)
-        collated_ri.temp = collated_ri.temp + obj.temp
+        #Temps are a lil different, bc they're 1 float per dataset until
+        #this point. Adding them together will add the floats, not append.
+        #Gotta cast as arrays
+        collated_ri.temp = [collated_ri.temp] + [obj.temp]
         collated_ri.k = collated_ri.k + obj.k
         collated_ri.dk = collated_ri.dk + obj.dk
 
