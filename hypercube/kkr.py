@@ -7,7 +7,7 @@ import scipy.fftpack as ft
 #rc('font',**{'family':'sans-serif','sans-serif':['Helvetica']})
 #rc('text',usetex=True)
 
-dataset = "../lit/he_2022/he2022_imag_refrac.txt"
+#dataset = "../lit/he_2022/he2022_imag_refrac.txt"
 
 #Sets I as function of chi which is a function of frequency
 

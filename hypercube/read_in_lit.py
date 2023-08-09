@@ -6,7 +6,7 @@ from hypercube import ri
 from hypercube import absorp_error
 
 #Location of experimental data files
-directory = "~/scattering/glimmer/lit"
+#directory = "~/scattering/glimmer/lit"
 
 def read_data(directory, filename):
     path = str(directory + "/" + filename)
