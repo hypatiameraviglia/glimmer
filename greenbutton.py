@@ -9,6 +9,8 @@ from hypercube import ri_wiggler
 from hypercube import t_fillout
 from hypercube import w_fillout
 from hypercube import ri
+from hypercube import collate
+from hypercube import interpolate
 
 directory = "../lit"
 
