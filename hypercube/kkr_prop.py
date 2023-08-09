@@ -38,4 +38,4 @@ def inv_fft(fft_k_dk, fft_wavel):
     for i in range(len(dn)):
         ri.dn[i] = dn[i]
     
-    return dn
+    return list(dn)

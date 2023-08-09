@@ -45,9 +45,9 @@ def extrapolate_wiggled_ris(pack):
     #print("n_extra: ", n_extra)
     #print("k_extra: ", k_extra)
     for i in range(len(wiggled_ris[0].wavel)):
-        ri.n_avg[i] = np.average(n_extra[i])
-        ri.n_stdev[i] = np.std(n_extra[i])
-        ri.k_avg[i] = np.average(k_extra[i])
-        ri.k_stdev[i] = np.std(k_extra[i])
+        ri.n_avg[i] = np.nanmean(n_extra[i])
+        ri.n_stdev[i] = np.nanstd(n_extra[i])
+        ri.k_avg[i] = np.nanmean(k_extra[i])
+        ri.k_stdev[i] = np.nanstd(k_extra[i])
 
     return ri.n_avg, ri.n_stdev, ri.k_avg, ri.k_stdev
