@@ -13,10 +13,6 @@ def calc_error_from_dalpha(ri, perc_dalpha):
     microns_to_cm = float(1E-4)
     for i in range(len(ri.wavel)):
         ri.dk[i] = float(np.absolute(ri.k[i])*(perc_dalpha*ri.wavel[i]*microns_to_cm)/(4*np.pi))
-    print("dks: ", ri.dk)
-    print("perc_dalpha: ", perc_dalpha)
-    print("ks: ", ri.k)
-    print("wavels: ", ri.wavel)
     return ri.dk
 
 def perovich(ri, dalpha_array):

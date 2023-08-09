@@ -42,56 +42,58 @@ def read_all_data(ri, directory):
             ri_list.append(dc_data)
             
     #print("ri_list after reading in data: ", ri_list[0].dataset, ", ", ri_list[1].dataset)
-    
-    for ri_obj in ri_list:
-        ri_obj.dk = read_in_lit.get_error(ri_obj)
-        #print("ks pulled by collate.py: ", ri_obj.k)
-        #print("dataset from ri_list: ", ri_obj.dataset)
+    """
+    for i in ri_list:
+        print("wavelengths in ", i.dataset, " are ", i.wavel, "right after being added to the list.")
+    """
     return ri_list
 
 def avg_stacked_pts(ri_list):
 
     #If two points from different datasets are at the same coordinates,
     # average em
-    for ri_1 in ri_list:
-        for ri_2 in ri_list:
+    #print("ks for ri_list[0]: ", ri_list[0].k)
+    #print("ks for ri_list[1]: ", ri_list[1].k)
+    for a in range(len(ri_list)):
+        for b in range(len(ri_list)):
             #print("dataset of ri_1: ", ri_1.dataset)
             #print("dataset of ri_2: ", ri_2.dataset)
-            for wavel_1 in ri_1.wavel:
-                for wavel_2 in ri_2.wavel:
-                    if ri_1 != ri_2 and wavel_1 == wavel_2 and ri_1.temp == ri_2.temp:
+            for c in range(len(ri_list[a].k) - 1):
+                #print("wavel in ", ri_1.dataset, " is ", wavel_1)
+                for d in range(len(ri_list[b].k) - 1):
+                    #print("wavel in ", ri_2.dataset, " is ", wavel_2)
+                    if ri_list[a].k[c] != ri_list[b].k[d] and ri_list[a].wavel[c] == ri_list[b].wavel[d] and ri_list[a].temp == ri_list[b].temp:
                         # Average ks
-                        a = ri_list.index(ri_1)
-                        b = ri_list.index(ri_2)
-                        c = ri_1.wavel.index(wavel_1)
-                        d = ri_2.wavel.index(wavel_2)
                         ri_list[a].k[c] = (ri_list[a].k[c] + ri_list[b].k[d])/2
                 
                         # Combine dks (assumes dks are same units as k, not % error)
                         #Index error here, not above
-                        #print("ri_list[a].dk[c]: ", ri_list[a].dk[c])
-                        #print("ri_list[a].k[a]: ", ri_list[a].k[c])
-                        #print("ri_list[b].dk[d]: ", ri_list[b].dk[d])
-                        #print("ri_list[b].k[d]: ", ri_list[b].k[d])
                         ri_list[a].dk[c]  = float(ri_list[a].k[c]*(np.sqrt((((ri_list[a].dk[c])/(ri_list[a].k[c]))**2) + (((ri_list[b].dk[d])/(ri_list[b].k[d])**2)))))
-                
+                        #print("After averaging, wavel in question is ", ri_list[b].wavel[d])
                         # Remove duplicate point
                         del(ri_list[b].dk[d])
                         del(ri_list[b].k[d])
                         del(ri_list[b].wavel[d])
+    #for i in ri_list:
+        #print("After averaging and deleting, wavelengths in ", i.dataset, "are ", i.wavel)
+        #print("After averaging and deleting, ks in ", i.dataset, "are ", i.k)
     return ri_list
-"""
-    for a in range(len(ri_list)):
-        for b in range(len(ri_list)):
-            for c in range(len(ri_list[a].wavel)):
-                for d in range(len(ri_list[b].wavel)):
-                    if (ri_list[a].wavel[c] == ri_list[b].wavel[d]) and (ri_list[a].temp == ri_list[b].temp):
-"""
 
 def collate(ri, ri_list):
 
     #Initialize object of class ri, add in first ri from list
     collated_ri = ri_list[0]
+    #Deepcopy each attribute in data to avoid overwriting
+    collated_ri = ri.ri("", [-1], [-1], "", [0], [0], [0], [0]) #Nonsense val
+    collated_ri.dataset = copy.deepcopy(ri_list[0].dataset)
+    collated_ri.wavel = copy.deepcopy(ri_list[0].wavel)
+    collated_ri.temp = copy.deepcopy(ri_list[0].temp)
+    #collated_ri.errortype = copy.deepcopy(ri_list[0].errortype)
+    collated_ri.n = copy.deepcopy(ri_list[0].n)
+    collated_ri.k = copy.deepcopy(ri_list[0].k)
+    collated_ri.dn = copy.deepcopy(ri_list[0].dn)
+    collated_ri.dk = copy.deepcopy(ri_list[0].dk)
+
     del(ri_list[0])
     # Does it matter if they're in order of temp and wavel as long as the 
     # ri data stays with its correct w/t coord?
@@ -114,14 +116,16 @@ def collate(ri, ri_list):
     # of rows. So adding each column separately shouldn't disturb the index
     # of rows in each distinct ri relative to each other
     for obj in ri_list:
-        collated_ri.wavel.extend(obj.wavel)
+        #print("wavels in obj: ", obj.wavel)
+        #print("dataset in obj: ", obj.dataset)
+        collated_ri.wavel = collated_ri.wavel + obj.wavel
         #Temps are a lil different, bc they're 1 float per dataset until
         #this point. Adding them together will add the floats, not append.
         #Gotta cast as arrays
         collated_ri.temp = [collated_ri.temp] + [obj.temp]
         collated_ri.k = collated_ri.k + obj.k
         collated_ri.dk = collated_ri.dk + obj.dk
-
+        #print("wavels after everything: ", collated_ri.wavel)
     # Not adding ns even if some come from the source data bc ns missing from
     # some datasets would mess up the indexing
 

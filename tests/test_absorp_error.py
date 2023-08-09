@@ -21,7 +21,7 @@ class TestAbsorpError(unittest.TestCase):
 
     def test_all_dks_filled(self):
         result = absorp_error.calc_error_from_dalpha(self.ri, self.dalpha)
-        print("\ndks for Leger are ", result)
+        #print("\ndks for Leger are ", result)
         self.assertEqual(len(result), len(self.ri.wavel))
 
     def test_dks_are_floats(self):
@@ -49,7 +49,7 @@ class TestAbsorpError(unittest.TestCase):
 
     def test_all_array_dks_filled(self):
         result = absorp_error.perovich(self.ri, self.dalpha_array)
-        print("\ndks from test are ", result)
+        #print("\ndks from test are ", result)
         self.assertEqual(len(result), len(self.ri.wavel))
 
     def test_array_dks_are_floats(self):

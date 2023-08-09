@@ -24,7 +24,7 @@ class TestCalcWiggled(unittest.TestCase):
 
     def test_n_avg_is_above_min(self):
         result = calc_wiggled.extrapolate_wiggled_ris(calc_wiggled.wiggle_indices_n_times(self.ri))[0]
-        print("\nresult is ", result)
+        #print("\nresult is ", result)
         nmin = 0.3 # Lowest n point in sample data
         for avg in result:
             self.assertGreater(avg, nmin)
