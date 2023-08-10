@@ -12,7 +12,7 @@ from hypercube import ri
 from hypercube import collate
 from hypercube import interpolate
 
-directory = "../lit"
+directory = "../lit/crystalline_ris"
 
 #Read in data from literature with dks
 """
