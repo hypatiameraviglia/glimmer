@@ -33,6 +33,9 @@ def spline(ri):
     temp_extra, wavel_extra = np.meshgrid(temp_extra, wavel_extra)
 
     #Interpolate and extrapolate n
+    print("len ri.wavel: ", len(ri.wavel))
+    print("len ri.k: ", len(ri.k))
+    print("len ri.n: ", len(ri.n))
     n_interp = LinearNDInterpolator(list(zip(ri.temp, ri.wavel)), ri.n)
     n_axis = n_interp(temp_axis, wavel_axis)
     n_extra = n_interp(temp_extra, wavel_extra)
