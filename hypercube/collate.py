@@ -10,7 +10,7 @@ from hypercube import read_in_lit
 from hypercube import interpolate
 
 #Location of experimental data files
-directory = "~/scattering/lit"
+#directory = "~/scattering/lit"
 
 def read_all_data(ri, directory):
     # First use read_in_lit to collect data from .txt files into multiple 
@@ -62,6 +62,7 @@ def avg_stacked_pts(ri_list):
                 #print("wavel in ", ri_1.dataset, " is ", wavel_1)
                 for d in range(len(ri_list[b].k) - 1):
                     #print("wavel in ", ri_2.dataset, " is ", wavel_2)
+                    print("Checking if ", ri_list[a].dataset, " ", ri_list[a].temp, " wavelength ", ri_list[a].wavel[c], " matches ", ri_list[b].dataset, " ", ri_list[b].temp, " wavelength ", ri_list[b].wavel[d])
                     if ri_list[a].k[c] != ri_list[b].k[d] and ri_list[a].wavel[c] == ri_list[b].wavel[d] and ri_list[a].temp == ri_list[b].temp:
                         # Average ks
                         ri_list[a].k[c] = (ri_list[a].k[c] + ri_list[b].k[d])/2

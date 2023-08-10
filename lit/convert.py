@@ -1,10 +1,10 @@
-#Reads in He (2022), which records their data by wavenumbers, and converts them to wavelength in microns.
+#Reads in data from studies which records their data by wavenumbers and converts them to wavelength in microns.
 
 import copy
 
 directory = "."
-old_filenames = ["old_he2022_30K.txt", "old_he2022_75K.txt", "old_he2022_105K.txt", "old_he2022_135K.txt"]
-new_filenames = ["new_he2022_30K.txt", "new_he2022_75K.txt", "new_he2022_105K.txt", "new_he2022_135K.txt"]
+old_filenames = ["old_hudgins1993_10K.txt", "old_hudgins1993_40K.txt", "old_hudgins1993_80K.txt", "old_hudgins1993_100K.txt", "old_hudgins1993_120K.txt", "old_hudgins1993_140K.txt"]
+new_filenames = ["new_hudgins_10K.txt", "new_hudgins_40K.txt", "new_hudgins1993_80K.txt", "new_hudgins1993_100K.txt", "new_hudgins1993_120K.txt", "new_hudgins1993_140K.txt"]
 freq = []
 dataset = ""
 temp = ""
@@ -23,11 +23,13 @@ for i in range(len(old_filenames)):
     data_lines = copy.deepcopy(lines[4:])
     freq = []
     k = []
+    n = []
     for l in data_lines:
         line = l.split(' ')
         freq.append(copy.deepcopy(float(line[0]))) #check splitting chars
         #print("first freq from ", old_filenames[i], " is ", freq[0])
-        k.append(copy.deepcopy(float(line[1])))
+        n.append(copy.deepcopy(float(line[1])))
+        k.append(copy.deepcopy(float(line[2])))
     f.close()
 
     wavel = [None]*len(freq)
@@ -41,8 +43,8 @@ for i in range(len(old_filenames)):
     g.write(str(dataset) + "\n")
     g.write(str(temp) + "\n")
     g.write(str(errortype) + "\n")
-    g.write("wavel  k\n")
+    g.write("wavel  n  k\n")
     #print("first wavel when being written to the new file from ", old_filenames[i], " are ", wavel[0])
     for i in range(len(wavel)):
-        g.write(str(wavel[i]) + "  n  " + str(k[i]) + "\n")
+        g.write(str(wavel[i]) + "  " + str(n[i]) + "  " + str(k[i]) + "\n")
     g.close()

@@ -12,7 +12,8 @@ def read_data(directory, filename):
     path = str(directory + "/" + filename)
     f = open(path, "r")
     lines = f.readlines()
-        
+    
+    print("Reading data from ", filename, ". . .")
     #refrac data by wavel
     ri.dataset = lines[0]
     #print(ri.dataset)
@@ -24,10 +25,11 @@ def read_data(directory, filename):
     k = []
     for i in data_lines:
         line = i.split('  ')
+        #print("First row of each column: ", line[0][0], " ", line[1][0], " ", line[2][0])
         #print("line split into array by read_lin_lit: ", line)
         wavel.append(float(line[0])) #check splitting chars
         #print("wavelengths: ", wavel)
-        n.append(float(line[1]))
+        #n.append(float(line[1]))
         #print("ns: ", n)
         k.append(float(line[2]))
         #print("ks read in by read_in_lit: ", k)
@@ -41,7 +43,7 @@ def read_data(directory, filename):
     ri.k_avg = [None]*len(ri.wavel)
     ri.n_stdev = [None]*len(ri.wavel)
     ri.k_stdev = [None]*len(ri.wavel)
-
+    print("Read successful.")
     f.close()
     return ri
 
