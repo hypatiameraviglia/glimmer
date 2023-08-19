@@ -27,8 +27,8 @@ def fft_on_inv_wavel(ri):
 
 def inv_fft(fft_k, fft_wavel):
     n = np.fft.ifft(fft_k*fft_wavel)
-    print("n as calculated by kkr: ", n)
-    print("len of kkr'd n: ", len(n))
+    #print("n as calculated by kkr: ", n)
+    #print("len of kkr'd n: ", len(n))
     ri.n = n
     #for i in range(len(n)):
     #    ri.n[i] = n[i]

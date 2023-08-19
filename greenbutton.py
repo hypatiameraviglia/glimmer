@@ -11,7 +11,7 @@ from hypercube import ri
 from hypercube import collate
 from hypercube import interpolate
 
-directory = "./lit/test"
+directory = "./tests"
 
 #Read in data from literature with dks
 """
@@ -21,13 +21,14 @@ together into one complete ri with stacked k points averaged and stacked dk
 points recalculated.
 """
 print("Reading data from files into one ri. . .")
-data = collate.collate(ri, collate.avg_stacked_pts(collate.read_all_data(ri, directory)))
+data, ri_list = collate.collate(ri, collate.avg_stacked_pts(collate.read_all_data(ri, directory)))
 print("Reading and collation successful.")
 
 #Calculate real indices from imaginary indices using Kramers-Kronig Relation
 print("Converting imaginary values to real values via KKR. . .")
-print("len ri.k in greenbutton.py: ", len(ri.k))
-data.n = kkr.inv_fft(kkr.fft_on_k(ri), kkr.fft_on_inv_wavel(ri))
+#print("len ri.k in greenbutton.py: ", len(ri.k))
+#print("len data.k in greenbutton.py: ", len(data.k))
+data.n = kkr.inv_fft(kkr.fft_on_k(data), kkr.fft_on_inv_wavel(data))
 print("KKR conversion complete.")
 
 #Calculate error on real indices from error on imaginary indices using a 
@@ -36,10 +37,17 @@ print("Calculating error on real indices via KKR. . .")
 data.dn = kkr_prop.inv_fft(kkr_prop.fft_on_k(data), kkr_prop.fft_on_inv_wavel(data))
 print("dn calculation complete.")
 
+#Organize k, n, dk, and dn into arrays of the dimensions wavel by temp for
+#interpolation
+print("Organizing indices into arrays of wavel by temp. . .")
+data, wtarray, karray, narray, dkarray, dnarray = collate.organize_array(data, ri_list)
+print("Organization complete.")
+
 #Extrapolate and 2D (sheet) interpolate across T range (130 K - 200 K) and 
 #wavelength range (0.1 - 30 microns)
 print("Interpolating and extrapolating across wavel-temp space with splines . . .")
-data, temp_axis, wavel_axis, temp_extra, wavel_extra, n_axis, n_extra, k_axis, k_extra, dn_axis, dn_extra, dk_axis, dk_extra = interpolate.spline(data)
+#print("Just before passing data to interpolate, len of k is ", len(data.k))
+data, temp_axis, wavel_axis, temp_extra, wavel_extra, k_axis, k_extra, n_axis, n_extra, dk_axis, dk_extra, dn_axis, dn_extra = interpolate.spline(data, wtarray, karray, narray, dkarray, dnarray)
 print("Interpolation and extrapolation complete.")
 
 #Assign interpolated values to a new ri object
@@ -62,7 +70,7 @@ extrapd_data.dk = dk_extra
 
 #Plot interpolation and extrapolation
 print("Plotting interpolated and extrapolated data. . .")
-interpolate.plot_interpolation(interpolate.spline(data))
+interpolate.plot_interpolation(data, temp_axis, wavel_axis, k_axis, n_axis, dk_axis, dn_axis)
 print("Plotting interpolation and extrapolation complete.")
 
 #Calculate new error introduced into estimated areas by use of spline, using a
@@ -84,13 +92,14 @@ map_dn(extrapd_data, interpd_data)
 map_dk(extrapd_data, interpd_data)
 
 def plot_errors(extrapd_data, interpd_data):
+    
     #Plot wiggled dn
     plt.pcolormesh(extrapd_data.temp, extrapd_data.wavel, extrapd_data.n_stdev, shading='auto')
     plt.legend()
     plt.colorbar()
     plt.axis("equal")
     plt.savefig("ic_n_stdev_extrapd.png")
-
+    
     #Plot wiggled dk
     plt.pcolormesh(extrapd_data.temp, extrapd_data.wavel, extrapd_data.k_stdev, shading='auto')
     plt.legend()
@@ -103,7 +112,7 @@ def plot_errors(extrapd_data, interpd_data):
     plt.colorbar()
     plt.axis("equal")
     plt.savefig("ic_n_stdev_interpd.png")
-
+    
     #Plot wiggled dk
     plt.pcolormesh(interpd_data.temp, interpd_data.wavel, interpd_data.k_stdev, shading='auto')
     plt.legend()
@@ -113,26 +122,27 @@ def plot_errors(extrapd_data, interpd_data):
 
 
 def plot_avgd_nk(extrapd_data, interpd_data):
+    
     #Plot averaged n
     plt.pcolormesh(extrapd_data.temp, extrapd_data.wavel, extrapd_data.n_avg, shading='auto')
     plt.legend()
     plt.colorbar()
     plt.axis("equal")
     plt.savefig("ic_n_avg_extrapd.png")
-
+    
     #Plot averaged k
     plt.pcolormesh(extrapd_data.temp, extrapd_data.wavel, extrapd_data.k_avg, shading='auto')
     plt.legend()
     plt.colorbar()
     plt.axis("equal")
     plt.savefig("ic_k_avg_extrapd.png")
-
+    
     plt.pcolormesh(interpd_data.temp, interpd_data.wavel, interpd_data.n_avg, shading='auto')
     plt.legend()
     plt.colorbar()
     plt.axis("equal")
     plt.savefig("ic_n_avg_interpd.png")
-
+    
     #Plot averaged k
     plt.pcolormesh(interpd_data.temp, interpd_data.wavel, interpd_data.k_avg, shading='auto')
     plt.legend()
@@ -142,10 +152,11 @@ def plot_avgd_nk(extrapd_data, interpd_data):
 
 #Produce a collection of .txt files containing the modelled points
 def map_n(extrapd_data, interpd_data):
+    
     #2D array by wavelength (y) and temperature (x) of n
     extrapd_array_wavel = np.array([extrapd_data.wavel, extrapd_data.n_avg])
     np.savetxt("ic_extrapd_n_wavel.txt", extrapd_array_wavel, header="2D array of extrapolated n values and their corresponding wavelengths in microns")
-
+    
     extrapd_array_temp = np.array([extrapd_data.temp, extrapd_data.n_avg])
     np.savetxt("ic_extrapd_n_temp.txt", extrapd_array_temp, header="2D array of extrapolated n values and their corresponding temperatures in Kelvin")
 

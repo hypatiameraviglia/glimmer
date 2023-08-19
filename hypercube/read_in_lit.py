@@ -60,9 +60,14 @@ def get_error(ri):
             ri.dk[i] = ri.k[i]*0.20
     #Test file
     if ri.dataset == "test2024\n":
-        trigger = True
+        #trigger = True
         for i in range(len(ri.k)):
             ri.dk[i] = ri.k[i]*0.30
+    #Test file
+    if ri.dataset == "test2025\n":
+        for i in range(len(ri.k)):
+            ri.dk[i] = ri.k[i]*0.10
+
     # Start of real data
     if ri.dataset == "warren1984\n":
         for i in range(len(ri.k)):
