@@ -95,7 +95,7 @@ def collate(ri, ri_list):
     #print("karray 1: ", karray[0])
     #print("karray 2: ", karray[1])
 
-    print("ks after averaging: ", ri_list[1].k)
+    #print("ks after averaging: ", ri_list[1].k)
     #Initialize object of class ri
     collated_ri = ri.ri("", [], [], "", [], [], [], [])
     #Deepcopy each attribute in data to avoid overwriting
@@ -155,8 +155,8 @@ def collate(ri, ri_list):
                 collated_ri.k.append(copy.deepcopy(ri_list[i].k[j]))  
                 collated_ri.dk.append(ri_list[i].dk[j])
         """
-    print("wavels after collation: ", collated_ri.wavel)
-    print("ks after collation: ", collated_ri.k)
+    #print("wavels after collation: ", collated_ri.wavel)
+    #print("ks after collation: ", collated_ri.k)
     # Not adding ns even if some come from the source data bc ns missing from
     # some datasets would mess up the indexing
     return collated_ri, ri_list
@@ -164,16 +164,16 @@ def collate(ri, ri_list):
 def organize_array(collated_ri, ri_list):
     #Set up empty arrays of dimensions wavelength and temp
     #This step happens after KKR and KKR prop!
-    for ri in ri_list:
-        print("first wavels in ri_list: ", ri.wavel[0])
+    #for ri in ri_list:
+        #print("first wavels in ri_list: ", ri.wavel[0])
     wtarray = np.empty((1, 2))
     karray = np.empty((len(collated_ri.temp), len(collated_ri.wavel)))
     narray = np.empty((len(collated_ri.temp), len(collated_ri.wavel)))
     dkarray = np.empty((len(collated_ri.temp), len(collated_ri.wavel)))
     dnarray = np.empty((len(collated_ri.temp), len(collated_ri.wavel)))
 
-    print("collated wavels before sorting into array: ", collated_ri.wavel) 
-    print("collated ks before sorting into array: ", collated_ri.k)
+    #print("collated wavels before sorting into array: ", collated_ri.wavel) 
+    #print("collated ks before sorting into array: ", collated_ri.k)
     #Fill in points in array for which we have data
     for a in range(len(ri_list)):
         for b in range(len(collated_ri.temp)):
@@ -184,7 +184,7 @@ def organize_array(collated_ri, ri_list):
                     #print("ks: ", ri_list[a].k[c], collated_ri.k[c])
                     if ri_list[a].temp == collated_ri.temp[b] and ri_list[a].wavel[d] == collated_ri.wavel[c] and ri_list[a].k[d] == collated_ri.k[c]:
                         wtarray = np.vstack((wtarray, [collated_ri.wavel[c], collated_ri.temp[b]]))
-                        print("wtarray: ", wtarray)
+                        #print("wtarray: ", wtarray)
                         karray[b][d] = ri_list[a].k[d]
                         narray[b][d] = collated_ri.n[c]
                         dkarray[b][d] = ri_list[a].dk[d]
@@ -193,11 +193,11 @@ def organize_array(collated_ri, ri_list):
     tupled_wtarray = [tuple(row) for row in wtarray[1:]]
     clean_wtarray = np.unique(tupled_wtarray, axis=0)
     
-    print("karray: ", karray)
-    print("narray: ", narray)
-    print("dkarray: ", dkarray)
-    print("dnarray: ", dnarray)
-    print("wtarray: ", clean_wtarray)
+    #print("karray: ", karray)
+    #print("narray: ", narray)
+    #print("dkarray: ", dkarray)
+    #print("dnarray: ", dnarray)
+    #print("wtarray: ", clean_wtarray)
 
     return collated_ri, clean_wtarray, karray, narray, dkarray, dnarray
 

@@ -10,6 +10,7 @@ from hypercube import ri_wiggler
 from hypercube import ri
 from hypercube import collate
 from hypercube import interpolate
+import test_CT
 
 directory = "./tests"
 
@@ -67,6 +68,9 @@ extrapd_data.n = n_extra
 extrapd_data.k = k_extra
 extrapd_data.dn = dn_extra
 extrapd_data.dk = dk_extra
+
+#Test plotting tool
+test_CT.test_plot(data, wtarray, narray)
 
 #Plot interpolation and extrapolation
 print("Plotting interpolated and extrapolated data. . .")
