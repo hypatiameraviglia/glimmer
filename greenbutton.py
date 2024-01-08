@@ -74,6 +74,7 @@ test_CT.test_plot(data, wtarray, narray)
 
 #Plot interpolation and extrapolation
 print("Plotting interpolated and extrapolated data. . .")
+#IT'S GETTING THIS FAR 1/8/24
 interpolate.plot_interpolation(data, temp_axis, wavel_axis, k_axis, n_axis, dk_axis, dn_axis)
 print("Plotting interpolation and extrapolation complete.")
 
@@ -83,7 +84,7 @@ print("Plotting interpolation and extrapolation complete.")
 calc_wiggled calls ri_wiggler to wiggle each n and k many (calc_wiggled.num_wiggled_indices) times, then averages each n and k across these wiggled values. THe standard deviation represents the complete error, both the experimental error and the error introduced by the spline.
 """
 print("Calculating new errors on n and k by wiggling splines. . .")
-extrapd_data.n_avg, extrapd_data.n_stdev, extrapd_data.k_avg, extrapd_data.k_stdev = calc_wiggled.extrapolate_wiggled_ris(wiggle_indices_n_times(extrapd_data))
+extrapd_data.n_avg, extrapd_data.n_stdev, extrapd_data.k_avg, extrapd_data.k_stdev = calc_wiggled.extrapolate_wiggled_ris(calc_wiggled.wiggle_indices_n_times(extrapd_data))
 print("Wiggling complete.")
 
 #Plots and datafiles
