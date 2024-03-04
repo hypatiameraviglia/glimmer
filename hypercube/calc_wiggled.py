@@ -48,10 +48,11 @@ def extrapolate_wiggled_ris(pack, wtarray, karray, narray, dkarray, dnarray):
     #ri.n_stdev[i] = np.nanstd(n_extra[i])
     #ri.k_avg[i] = np.nanmean(k_extra[i])
     #ri.k_stdev[i] = np.nanstd(k_extra[i])
-    print("r.n_avg dtype: ", ri.n_avg.dtype)
-    np.nanmean(n_extra, axis=0, out=ri.n_avg)
-    np.nanstd(n_extra, axis=0, out=ri.n_stdev)
-    np.nanmean(k_extra, axis=0, out=ri.k_avg)
-    np.nanstd(k_extra, axis=0, out=ri.k_stdev)
+    #print("r.n_avg dtype: ", ri.n_avg.dtype)
+    #print("n_extra shape: ", n_extra.shape)
+    ri.n_avg = np.nanmean(n_extra)
+    ri.n_stdev = np.nanstd(n_extra)
+    ri.k_avg = np.nanmean(k_extra)
+    ri.k_stdev = np.nanstd(k_extra)
     
     return ri.n_avg, ri.n_stdev, ri.k_avg, ri.k_stdev
