@@ -10,7 +10,8 @@ from hypercube import ri_wiggler
 from hypercube import ri
 from hypercube import collate
 from hypercube import interpolate
-import test_CT
+from hypercube import min_max
+#import test_CT
 
 directory = "./tests"
 
@@ -37,6 +38,11 @@ print("KKR conversion complete.")
 print("Calculating error on real indices via KKR. . .")
 data.dn = kkr_prop.inv_fft(kkr_prop.fft_on_k(data), kkr_prop.fft_on_inv_wavel(data))
 print("dn calculation complete.")
+
+#Calculate upper and lower bounds for each n and k using their errors
+print("Calculating upper and lower bounds for n and k. . .")
+data = min_max.get_min_max(data)
+print("Bounds calculated.")
 
 #Organize k, n, dk, and dn into arrays of the dimensions wavel by temp for
 #interpolation
@@ -70,7 +76,7 @@ extrapd_data.dn = dn_extra
 extrapd_data.dk = dk_extra
 
 #Test plotting tool
-test_CT.test_plot(data, wtarray, narray)
+#test_CT.test_plot(data, wtarray, narray)
 
 #Plot interpolation and extrapolation
 print("Plotting interpolated and extrapolated data. . .")
@@ -83,8 +89,10 @@ print("Plotting interpolation and extrapolation complete.")
 """
 calc_wiggled calls ri_wiggler to wiggle each n and k many (calc_wiggled.num_wiggled_indices) times, then averages each n and k across these wiggled values. THe standard deviation represents the complete error, both the experimental error and the error introduced by the spline.
 """
+#IT'S GETTING THIS FAR 2/4/24
 print("Calculating new errors on n and k by wiggling splines. . .")
-extrapd_data.n_avg, extrapd_data.n_stdev, extrapd_data.k_avg, extrapd_data.k_stdev = calc_wiggled.extrapolate_wiggled_ris(calc_wiggled.wiggle_indices_n_times(extrapd_data))
+#The innermost input for this function was extrapd_data but is now data because it should be wiggling the original points and recalculating the splines from the original
+extrapd_data.n_avg, extrapd_data.n_stdev, extrapd_data.k_avg, extrapd_data.k_stdev = calc_wiggled.extrapolate_wiggled_ris(calc_wiggled.wiggle_indices_n_times(data), wtarray, karray, narray, dkarray, dnarray)
 print("Wiggling complete.")
 
 #Plots and datafiles

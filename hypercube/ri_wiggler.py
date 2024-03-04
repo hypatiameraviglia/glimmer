@@ -27,8 +27,14 @@ def copy_ri(ri):
 
 #Wiggle 'em
 def wiggle_indices(ri_copy):
+    #print("Length of wavel: ", len(ri_copy.wavel))
+    #print("Length of n: ", len(ri_copy.n))
+    #print("Length of nmin: ", len(ri_copy.nmin))
     for i in range(len(ri_copy.wavel)):
         #wiggle
+        #print("ri_copy.n[i]:", ri_copy.n[i])
+        #print("ri_copy.nmin[i]:", ri_copy.nmin[i])
+        #print("ri_copy.nmax[i]:", ri_copy.nmax[i])
         ri_copy.n[i] = random.uniform(ri_copy.nmin[i], ri_copy.nmax[i])
         ri_copy.k[i] = random.uniform(ri_copy.kmin[i], ri_copy.kmax[i])
     return ri_copy

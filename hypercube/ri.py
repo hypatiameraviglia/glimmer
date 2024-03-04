@@ -1,4 +1,6 @@
 #Create class ri to store data from lit
+import numpy as np
+
 class ri:
     def __init__(self, dataset, wavel, temp, errortype, n, k, dn, dk):
         #wavelengths
@@ -18,21 +20,25 @@ class ri:
         #error bar on imaginary ref. ind.
         self.dk = [ float(x) for x in dk ] #Calculated in read_in_lit.py
         #top of error bar for n
-        self.nmax = [ ni + dni for ni,dni in zip(n,dn)]
+        self.nmax = [None]*len(wavel) #Calculated in min_max.py
         #bottom of error bar for n
-        self.nmin = [ ni - dni for ni,dni in zip(n,dn)]
+        self.nmin = [None]*len(wavel)
         #top of error bar for k
-        self.kmax = [ ki + dki for ki,dki in zip(k,dk)]
+        self.kmax = [None]*len(wavel)
         #bottom of error bar for k
-        self.kmin = [ ki - dki for ki,dki in zip(k,dk)]
+        self.kmin = [None]*len(wavel)
         #avg n across many interpolations
-        self.n_avg = [None]*len(wavel) # Calculated by calc_wiggled.extrapolate_wiggled_ris
+        #self.n_avg = np.array([None]*len(wavel), dtype=np.float32),  # Calculated by calc_wiggled.extrapolate_wiggled_ris
+        self.n_avg = np.empty(len(wavel))
         #avg k across many interpolations
-        self.k_avg = [None]*len(wavel)
+        #self.k_avg = np.array([None]*len(wavel), dtype=np.float32)
+        self.k_avg = np.empty(len(wavel))
         #stdev of n across many interpolations
-        self.n_stdev = [None]*len(wavel)
+        #self.n_stdev = np.array([None]*len(wavel), dtype=np.float32)
+        self.n_stdev = np.empty(len(wavel))
         #stdev of k across many interpolations
-        self.k_stdev = [None]*len(wavel)
+        #self.k_stdev = np.array([None]*len(wavel), dtype=np.float32)
+        self.k_stdev = np.empty(len(wavel))
     def __str__(self, dataset, wavel, n, k, dn, dk):
         print("{self.dataset} is a group of refractive indices of length ", len(n))
 
