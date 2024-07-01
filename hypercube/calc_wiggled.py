@@ -1,58 +1,57 @@
 #calc_wiggled.py
-# Takes in wiggled copies of the k, n, dn, and dk from wiggle_ri.py and
+# Takes in wiggled copies of the k, n, dn, and dk from wiggler.py and
 # calulates the errors introduced by the spline applied to interpolated points
 
 import numpy as np
-from hypercube import ri_wiggler
-from hypercube import ri
+from hypercube import wiggler
 from hypercube import interpolate
 
 num_wiggled_indices = 10
 
-#TODO: read in # of wavels
-
-#Wiggle indices num_wiggled_indices times
-def wiggle_indices_n_times(ri):
-    wiggled_ris = [None]*num_wiggled_indices
-    for i in range(num_wiggled_indices):
-        #Make a copy of the original indices list
-        ri_copy = ri_wiggler.copy_ri(ri)
-        #Wiggle each n and k at each wavelength point in list
-        wiggled_ris[i] = ri_wiggler.wiggle_indices(ri_copy)
-    pack = (ri, wiggled_ris)
-    return pack
-
-"""
-def interpolate_wiggled_ris(wiggled_ris):
-        #Interpolate via spline
-
-        #For each n and k at each wavel, find avg and stdev across wiggles
-"""
-
-def extrapolate_wiggled_ris(pack, wtarray, karray, narray, dkarray, dnarray):
-    ri = pack[0]
-    wiggled_ris = pack[1]
-    #Extrapolate via spline
-    n_extra = [None]*num_wiggled_indices
-    k_extra = [None]*num_wiggled_indices
-    for i in range(num_wiggled_indices):
-        n_extra[i] = interpolate.spline(wiggled_ris[i], wtarray, karray, narray, dkarray, dnarray)[8] #these indices verifiable in interpolate.py
-        k_extra[i] = interpolate.spline(wiggled_ris[i], wtarray, karray, narray, dkarray, dnarray)[6]
-
-    #For each n and k at each wavel, find avg and stdev across wiggles
-    #print("len of ri.n_avg: ", len(ri.n_avg))
-    #print("len of wiggled_ris[0].wavel: ", len(wiggled_ris[0].wavel))
-    #print("len of n_extra[0]: ", len(n_extra[0]))
-    #print("len of k_extra[0]: ", len(k_extra[0]))
-    #ri.n_avg[i] = np.nanmean(n_extra[i])
-    #ri.n_stdev[i] = np.nanstd(n_extra[i])
-    #ri.k_avg[i] = np.nanmean(k_extra[i])
-    #ri.k_stdev[i] = np.nanstd(k_extra[i])
-    #print("r.n_avg dtype: ", ri.n_avg.dtype)
-    #print("n_extra shape: ", n_extra.shape)
-    ri.n_avg = np.nanmean(n_extra)
-    ri.n_stdev = np.nanstd(n_extra)
-    ri.k_avg = np.nanmean(k_extra)
-    ri.k_stdev = np.nanstd(k_extra)
+def stats(data, karray_for_wiggling, narray_for_wiggling, dkarray_for_wiggling, dnarray_for_wiggling):
     
-    return ri.n_avg, ri.n_stdev, ri.k_avg, ri.k_stdev
+    # Create arrays of length num_wiggled_indices to hold the monte carlo'd n and k values as we create them
+    wiggled_karrays = [None]*num_wiggled_indices
+    wiggled_narrays = [None]*num_wiggled_indices
+    
+    #karray_for_wiggling and narray_for_wiggling are reorganized and regridded, containing only the original data and NaNs. They have not been interpolated. Recall that they were created via deepcopy immediately after the collate_organizedata step (see greenbutton.py)
+
+    for i in range(num_wiggled_indices):
+        # Wiggle the k and n arrays
+        wiggled_karrays[i], wiggled_narrays[i] = wiggler.wiggle_arrays(karray_for_wiggling, narray_for_wiggling, dkarray_for_wiggling, dnarray_for_wiggling)
+
+        # Interpolate the wiggled k and n arrays (fill in missing values)
+        t, w, wiggled_karrays[i], wiggled_narrays[i] = interpolate.splineweave(data, wiggled_karrays[i], wiggled_narrays[i]) #these indices verifiable in interpolate.py
+
+    #For each n and k at each wavel and temp, find avg and stdev across wiggles
+    print("length of mc_narrays: ", len(wiggled_narrays))
+    print("length of first monte carlo'd narray: ", len(wiggled_narrays[0]))
+    
+    # Stack the MC'd arrays, then calculate mean and stdev for each corresponding point across the stack.
+    nstacked = np.stack(wiggled_narrays, axis=0)
+    navg = np.nanmean(nstacked, axis=0)
+    nstdev = np.nanstd(nstacked, axis=0)
+
+    kstacked = np.stack(wiggled_karrays, axis=0)
+    kavg = np.nanmean(kstacked, axis=0)
+    kstdev = np.nanstd(kstacked, axis=0)
+
+    # Test that the avg and stdev arrays are the same shape as the wiggled arrays, i.e., there should be one average and one stdev for each wavel-temp cooridnate
+    # also check if they contain emoty spaces, which shouldn't happen post-interpolation
+
+    for array in [navg, nstdev, kavg, kstdev]:
+        if np.isnan(array).any() == True:
+            print("WARNING: NaNs in the average or stdev arrays")
+            print(array)
+            break
+        if array.shape != wiggled_narrays[0].shape:
+            print("WARNING: average or stdev arrays are not the same shape as the wiggled arrays")
+            break
+        else:
+            pass
+    
+    print("shape of navg: ", navg.shape)
+    print("shape of nstdev: ", nstdev.shape)
+    print("shape of kavg: ", kavg.shape)
+    print("shape of kstdev: ", kstdev.shape)
+    return navg, nstdev, kavg, kstdev

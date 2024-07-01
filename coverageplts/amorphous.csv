@@ -1,0 +1,11 @@
+label,tmin,tmax,wmin,wmax,colors,marks
+Leger et al. (1983),77,77,2.5,80,#332288,o
+Mukai and Kraetschmer (1986),23,23,2.5,15,#44AA99,o
+Hudgins et al. (1993),10,140,2.5,20,#999933,o
+Mastrapa et al. (2008),20,70,1.1,15,#88CCEE,o
+Browell and Anderson (1975),77,77,0.16,0.32,#DDCC77,o
+Kofman et al. (2019),10,130,0.21,0.757,#117733,o
+Berland et al. (1995),35,140,0.6328,0.6328,#CC6677,o
+Brown et al. (1996),85,150,0.6328,0.6328,#332288,*
+Dohnalek et al. (2003),22,140,0.6328,0.6328,#88CCEE,*
+Westley et al. (1998),20,140,0.4358,0.4358,#44AA99,*

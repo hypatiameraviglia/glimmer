@@ -42,6 +42,13 @@ def read_all_data(ri, directory):
             ri_list.append(dc_data)
             
     #print("ri_list after reading in data: ", ri_list[0].dataset, ", ", ri_list[1].dataset)
+    #print("values within ri_list after reading in data: ")
+    #print("wavel: ", ri_list[0].wavel, ", ", ri_list[1].wavel, "\n")
+    #print("temp: ", ri_list[0].temp, ", ", ri_list[1].temp, "\n")
+    #print("k: ", ri_list[0].k, ", ", ri_list[1].k, "\n")
+    #print("n: ", ri_list[0].n, ", ", ri_list[1].n, "\n")
+
+
     """
     for i in ri_list:
         print("wavelengths in ", i.dataset, " are ", i.wavel, "right after being added to the list.")
@@ -200,4 +207,133 @@ def organize_array(collated_ri, ri_list):
     #print("wtarray: ", clean_wtarray)
 
     return collated_ri, clean_wtarray, karray, narray, dkarray, dnarray
+
+def organize_arrayv2(collated_ri, ri_list):
+    """
+    Drafted partially with chatgpt, HM June 26 2024
+    This function takes in the ri object after data from all the sources has been collated, i.e., added to one ri object and overlapping points averaged. The purpose of this function is to create arrays of k, n, dk, and dn where original data is placed at indices wavel, temp. Indices where we don't have original data get a NaN. The NaNs are essential for the interpolation fucntion to apply its mask correctly.
+    The output arrays (n, k, dn, and dk) should be of shape (T, W) where T is length of the array of temperature we wish to interpolate over (i.e., from the lowest temperature we have original data for to the highest temperature we have data for in steps of arbitrary size t_step. similarly for wavelength.) 
+    """
+    #Set up empty arrays of dimensions wavelength and temp
+    #This step happens after KKR and KKR prop!
+    #wtarray = np.empty((1, 2))
+    karray = np.empty((len(collated_ri.temp), len(collated_ri.wavel)))
+    narray = np.empty((len(collated_ri.temp), len(collated_ri.wavel)))
+    dkarray = np.empty((len(collated_ri.temp), len(collated_ri.wavel)))
+    dnarray = np.empty((len(collated_ri.temp), len(collated_ri.wavel)))
+    
+    #Fill in points in array for which we have data
+    for a in range(len(ri_list)):
+        for b in range(len(collated_ri.temp)):
+            for c in range(len(collated_ri.wavel)):
+                for d in range(len(ri_list[a].wavel)):
+                    if ri_list[a].temp == collated_ri.temp[b] and ri_list[a].wavel[d] == collated_ri.wavel[c] and ri_list[a].k[d] == collated_ri.k[c]:
+                        #wtarray = np.vstack((wtarray, [collated_ri.wavel[c], collated_ri.temp[b]]))     
+                        karray[b][d] = ri_list[a].k[d]
+                        narray[b][d] = collated_ri.n[c]
+                        dkarray[b][d] = ri_list[a].dk[d]
+                        dnarray[b][d] = collated_ri.dn[c]
+    # Check that the newly organized narray, karray, dnarray, and dkarray are the same shape
+    if narray.shape == karray.shape:
+        print("narray and karray are same shape, we good")
+    else:
+        print("narray and karray are different shapes, we bad")
+    if dnarray.shape == karray.shape:
+        print("dnarray and karray are same shape, we good")
+    else:
+        print("dnarray and karray are different shapes, we bad")
+    if dkarray.shape == karray.shape:
+        print("dkarray and karray are same shape, we good")
+    else:
+        print("dkarray and karray are different shapes, we bad")
+
+    #Clean up wtarray
+    #tupled_wtarray = [tuple(row) for row in wtarray[1:]]
+    #clean_wtarray = np.unique(tupled_wtarray, axis=0)
+
+    #Place original data into a matrix of defined size, where coordinates without data receiev NaN
+    #Note: this local definition of T and W defines a space of interpolation, not extrapolation. in interpolate.py, one can define a larger range of temps and wavels to extrapolate over if desired. For this purpose, however, we just want a grid to interpolate over.
+    """
+    T = int(collated_ri.temp[-1] - collated_ri.temp[0]) #steps between max and min temp, step sizes is 1 K
+    W = int(collated_ri.wavel[-1]*100000 - collated_ri.wavel[0]*100000) #steps between max and min wavel, step size is 0.000001 micron, TODO update
+    #print("w: ", W)
+    #print("t: ", T)
+    Warray = np.linspace(collated_ri.wavel[0], collated_ri.wavel[-1], W)
+    Tarray = np.linspace(collated_ri.temp[0], collated_ri.temp[-1], T)
+
+    #bucket to hold output for each n, k, dn, dk
+    bucket = []
+
+    for array in [karray, narray, dkarray, dnarray]:
+        # Initialize the array of real indicies with NaNs
+        data = np.full((T, W), np.nan)
+
+        # Convert array to a list of tuples (t, w, value)
+        array_tuples = [(i, j, array[i, j]) 
+                        for i in range(len(collated_ri.temp)) 
+                        for j in range(len(collated_ri.wavel))]
+
+        # Populate the data array with values from n_array_tuples
+        for t, w, value in array_tuples:
+            if t < T and w < W:
+                data[t, w] = value
+
+        bucket.append(data)
+
+    f = open("bucket_n.txt", "w")
+    for i in bucket[0]:
+        for j in i:
+            f.write(str(j) + ",")
+        f.write("\n")
+    f.close()
+    """
+    # Define new, higher-resolution temp and wavel arrays
+    new_temp = np.arange(min(collated_ri.temp), max(collated_ri.temp), 1) #step size is 1 K
+    new_wavel = np.arange(min(collated_ri.wavel), max(collated_ri.wavel), 0.01) #step size is 0.01 micron
+
+    # Initialize the new data array with NaNs
+    data = np.full((len(new_temp), len(new_wavel)), np.nan)
+
+    # Initialize arrays to store differences
+    # narray, karray, dnarray, dkarray should all be the same shape -- checked immediately after organization step
+    temp_diff = np.full(narray.shape, np.nan)
+    wavel_diff = np.full(narray.shape, np.nan)
+
+    arrays = [] # bucket to store the regridded data in for return
+    
+    # Function to find the closest index in the new grid
+    def find_closest_index(array, value):
+        # Subtracts the value from each item in the array and returns the index of the item with the minimum difference, i.e., the index of the item closest in value to the given value
+        return (np.abs(array - value)).argmin()
+
+    # Populate the new data array with values from n_array at mapped positions and calculate differences
+    for array in [karray, narray, dkarray, dnarray]:
+        for i in range(array.shape[0]):
+            for j in range(array.shape[1]):
+                new_t_index = find_closest_index(new_temp, collated_ri.temp[i])
+                new_w_index = find_closest_index(new_wavel, collated_ri.wavel[j])
+                data[new_t_index, new_w_index] = array[i, j]
+
+                #check that the points haven't been shifted too much during mapping to the new, higher-resolution grid
+                temp_diff[i, j] = new_temp[new_t_index] - collated_ri.temp[i]
+                wavel_diff[i, j] = new_wavel[new_w_index] - collated_ri.wavel[j]
+
+                if temp_diff[i, j] > 0.5:
+                        print("WARNING: during mapping, the index/error at ", collate_ri.temp[i], collate_ri.wavel[j], " has been shifted in temperature more than 0.5 K.")
+
+                if wavel_diff[i, j] > 0.005:
+                        print("WARNING: during mapping, the index/error at ", collate_ri.temp[i], collate_ri.wavel[j], " has been shifted in wavelength more than 0.005 micron.")
+        
+        #Add the new gridded array, now with all the original data added and all the empty spaces NaN, to the bucket
+        arrays.append(data)
+
+    # check formatting of organized and remapped data is correct
+    f = open("bucket_n.txt", "w")
+    for i in arrays[0]:
+        for j in i:
+            f.write(str(j) + ",")
+        f.write("\n")
+    f.close()
+
+    return arrays[0], arrays[1], arrays[2], arrays[3]
 
